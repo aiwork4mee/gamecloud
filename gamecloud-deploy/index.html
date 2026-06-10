@@ -1,0 +1,2345 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameCloud | Level Up Your Reality</title>
+<meta name="description" content="GameCloud — The online arcade where you upload, share, and play HTML-based browser games. Rate games, climb the leaderboard, and discover the community's best creations."/>
+<meta name="keywords" content="html games, browser games, game community, upload games, play games online, indie games"/>
+<meta name="theme-color" content="#131313"/>
+<meta property="og:title" content="GameCloud | Level Up Your Reality"/>
+<meta property="og:description" content="Upload, share and play HTML games in your browser. Rate, rank and discover the best indie browser games."/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="GameCloud"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23131313'/%3E%3Ctext y='.9em' font-size='80'%3E%F0%9F%8E%AE%3C/text%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;800;900&family=JetBrains+Mono:wght@500&family=Rubik:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+/* ================================================================
+   GAMECLOUD PRODUCTION CSS - No Tailwind CDN
+   Full design system: tokens, resets, utilities, components
+   ================================================================ */
+
+/* ── RESET ─────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{line-height:1.5;-webkit-text-size-adjust:100%;tab-size:4}
+body{font-family:'Rubik',sans-serif;line-height:1.6;font-size:16px;font-weight:400}
+img,svg{display:block;max-width:100%}
+button,input,textarea,select{font:inherit;background:none;border:none;outline:none;cursor:pointer}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none}
+textarea{resize:vertical}
+
+/* ── CSS CUSTOM PROPERTIES (Design Tokens) ──────────────────────── */
+:root{
+  --clr-primary:#ecb2ff;
+  --clr-on-primary:#520071;
+  --clr-primary-container:#bd00ff;
+  --clr-on-primary-container:#ffffff;
+  --clr-primary-fixed:#f8d8ff;
+  --clr-primary-fixed-dim:#ecb2ff;
+  --clr-on-primary-fixed:#320047;
+  --clr-on-primary-fixed-variant:#74009f;
+  --clr-inverse-primary:#9900cf;
+
+  --clr-secondary:#edffe1;
+  --clr-on-secondary:#053900;
+  --clr-secondary-container:#32ff00;
+  --clr-on-secondary-container:#127100;
+  --clr-secondary-fixed:#79ff5a;
+  --clr-secondary-fixed-dim:#2ce500;
+  --clr-on-secondary-fixed:#022100;
+  --clr-on-secondary-fixed-variant:#0a5300;
+
+  --clr-tertiary:#00dbe9;
+  --clr-on-tertiary:#00363a;
+  --clr-tertiary-container:#00838b;
+  --clr-on-tertiary-container:#ffffff;
+  --clr-tertiary-fixed:#7df4ff;
+  --clr-tertiary-fixed-dim:#00dbe9;
+  --clr-on-tertiary-fixed:#002022;
+  --clr-on-tertiary-fixed-variant:#004f54;
+
+  --clr-error:#ffb4ab;
+  --clr-on-error:#690005;
+  --clr-error-container:#93000a;
+  --clr-on-error-container:#ffdad6;
+
+  --clr-background:#131313;
+  --clr-on-background:#e5e2e1;
+  --clr-surface:#131313;
+  --clr-surface-dim:#131313;
+  --clr-surface-bright:#393939;
+  --clr-surface-tint:#ecb2ff;
+  --clr-surface-variant:#353534;
+  --clr-on-surface:#e5e2e1;
+  --clr-on-surface-variant:#d4c0d7;
+  --clr-inverse-surface:#e5e2e1;
+  --clr-inverse-on-surface:#313030;
+
+  --clr-surface-container-lowest:#0e0e0e;
+  --clr-surface-container-low:#1c1b1b;
+  --clr-surface-container:#201f1f;
+  --clr-surface-container-high:#2a2a2a;
+  --clr-surface-container-highest:#353534;
+
+  --clr-outline:#9d8ba0;
+  --clr-outline-variant:#514255;
+
+  --radius-sm:0.5rem;
+  --radius:1rem;
+  --radius-md:1.5rem;
+  --radius-lg:2rem;
+  --radius-xl:3rem;
+  --radius-full:9999px;
+
+  --sp-xs:4px;
+  --sp-sm:12px;
+  --sp-md:24px;
+  --sp-lg:48px;
+  --sp-xl:80px;
+  --sp-gutter:24px;
+  --sp-base:8px;
+  --container-max:1280px;
+}
+
+/* ── BASE STYLES ────────────────────────────────────────────────── */
+html.dark,body{background-color:var(--clr-background);color:var(--clr-on-background)}
+::selection{background:var(--clr-primary);color:var(--clr-on-primary)}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--clr-background)}
+::-webkit-scrollbar-thumb{background:var(--clr-surface-container-highest);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--clr-outline-variant)}
+
+/* ── TYPOGRAPHY ─────────────────────────────────────────────────── */
+.font-display-xl,.font-headline-lg,.font-headline-lg-mobile,.font-button-text{font-family:'Anybody',sans-serif}
+.font-body-md{font-family:'Rubik',sans-serif}
+.font-label-mono{font-family:'JetBrains Mono',monospace}
+
+.text-display-xl{font-size:clamp(36px,6vw,64px);font-weight:900;line-height:1.1;letter-spacing:-0.02em}
+.text-headline-lg{font-size:40px;font-weight:800;line-height:1.2}
+.text-headline-lg-mobile{font-size:32px;font-weight:800;line-height:1.2}
+.text-button-text{font-size:18px;font-weight:700;line-height:1}
+.text-body-md{font-size:16px;font-weight:400;line-height:1.6}
+.text-label-mono{font-size:14px;font-weight:500;line-height:1.4;letter-spacing:0.05em}
+
+/* ── COLOR UTILITIES ────────────────────────────────────────────── */
+.text-primary{color:var(--clr-primary)}
+.text-on-primary{color:var(--clr-on-primary)}
+.text-primary-container{color:var(--clr-primary-container)}
+.text-on-primary-container{color:var(--clr-on-primary-container)}
+.text-primary-fixed-dim{color:var(--clr-primary-fixed-dim)}
+.text-secondary{color:var(--clr-secondary)}
+.text-on-secondary{color:var(--clr-on-secondary)}
+.text-secondary-container{color:var(--clr-secondary-container)}
+.text-on-secondary-container{color:var(--clr-on-secondary-container)}
+.text-tertiary{color:var(--clr-tertiary)}
+.text-on-tertiary{color:var(--clr-on-tertiary)}
+.text-on-tertiary-container{color:var(--clr-on-tertiary-container)}
+.text-error{color:var(--clr-error)}
+.text-on-error{color:var(--clr-on-error)}
+.text-on-background{color:var(--clr-on-background)}
+.text-on-surface{color:var(--clr-on-surface)}
+.text-on-surface-variant{color:var(--clr-on-surface-variant)}
+.text-surface-variant{color:var(--clr-surface-variant)}
+.text-outline{color:var(--clr-outline)}
+.text-outline-variant{color:var(--clr-outline-variant)}
+.text-white{color:#fff}
+.text-background{color:var(--clr-background)}
+
+/* ── BACKGROUND UTILITIES ────────────────────────────────────────── */
+.bg-background{background-color:var(--clr-background)}
+.bg-surface{background-color:var(--clr-surface)}
+.bg-surface-container{background-color:var(--clr-surface-container)}
+.bg-surface-container-low{background-color:var(--clr-surface-container-low)}
+.bg-surface-container-high{background-color:var(--clr-surface-container-high)}
+.bg-surface-container-highest{background-color:var(--clr-surface-container-highest)}
+.bg-surface-container-lowest{background-color:var(--clr-surface-container-lowest)}
+.bg-primary{background-color:var(--clr-primary)}
+.bg-primary-container{background-color:var(--clr-primary-container)}
+.bg-secondary{background-color:var(--clr-secondary)}
+.bg-secondary-container{background-color:var(--clr-secondary-container)}
+.bg-tertiary{background-color:var(--clr-tertiary)}
+.bg-tertiary-container{background-color:var(--clr-tertiary-container)}
+.bg-error{background-color:var(--clr-error)}
+.bg-error-container{background-color:var(--clr-error-container)}
+.bg-black{background-color:#000}
+.bg-white{background-color:#fff}
+/* alpha variants */
+.bg-surface-80{background-color:rgba(19,19,19,0.8)}
+.bg-black-50{background-color:rgba(0,0,0,0.5)}
+.bg-black-40{background-color:rgba(0,0,0,0.4)}
+.bg-background-50{background-color:rgba(19,19,19,0.5)}
+.bg-primary-5{background-color:rgba(236,178,255,0.05)}
+.bg-primary-10{background-color:rgba(236,178,255,0.1)}
+.bg-primary-20{background-color:rgba(236,178,255,0.2)}
+.bg-secondary-container-30{background-color:rgba(50,255,0,0.3)}
+.bg-tertiary-20{background-color:rgba(0,219,233,0.2)}
+
+/* ── BORDER UTILITIES ────────────────────────────────────────────── */
+.border{border:1px solid var(--clr-outline-variant)}
+.border-2{border:2px solid var(--clr-outline-variant)}
+.border-4{border:4px solid var(--clr-outline-variant)}
+.border-b{border-bottom:1px solid var(--clr-outline-variant)}
+.border-b-2{border-bottom:2px solid}
+.border-b-4{border-bottom:4px solid var(--clr-surface-container-highest)}
+.border-t{border-top:1px solid var(--clr-outline-variant)}
+.border-t-4{border-top:4px solid var(--clr-surface-container-highest)}
+.border-l-4{border-left:4px solid}
+.border-r{border-right:1px solid}
+
+.border-outline-variant{border-color:var(--clr-outline-variant)}
+.border-outline{border-color:var(--clr-outline)}
+.border-primary{border-color:var(--clr-primary)!important}
+.border-secondary{border-color:var(--clr-secondary)}
+.border-tertiary{border-color:var(--clr-tertiary)}
+.border-black{border-color:#000}
+.border-dashed{border-style:dashed}
+.border-surface-container-highest{border-color:var(--clr-surface-container-highest)}
+
+.divide-y>*+*{border-top:1px solid var(--clr-outline-variant)}
+.divide-outline-variant>*+*{border-top-color:var(--clr-outline-variant)}
+
+/* ── BORDER RADIUS ───────────────────────────────────────────────── */
+.rounded{border-radius:var(--radius)}
+.rounded-sm{border-radius:var(--radius-sm)}
+.rounded-md{border-radius:var(--radius-md)}
+.rounded-lg{border-radius:var(--radius-lg)}
+.rounded-xl{border-radius:var(--radius-xl)}
+.rounded-full{border-radius:var(--radius-full)}
+.rounded-r-md{border-radius:0 var(--radius-md) var(--radius-md) 0}
+
+/* ── SPACING ─────────────────────────────────────────────────────── */
+.p-xs{padding:var(--sp-xs)}
+.p-sm{padding:var(--sp-sm)}
+.p-md{padding:var(--sp-md)}
+.p-lg{padding:var(--sp-lg)}
+.px-xs{padding-left:var(--sp-xs);padding-right:var(--sp-xs)}
+.px-sm{padding-left:var(--sp-sm);padding-right:var(--sp-sm)}
+.px-md{padding-left:var(--sp-md);padding-right:var(--sp-md)}
+.px-lg{padding-left:var(--sp-lg);padding-right:var(--sp-lg)}
+.px-xl{padding-left:var(--sp-xl);padding-right:var(--sp-xl)}
+.py-xs{padding-top:var(--sp-xs);padding-bottom:var(--sp-xs)}
+.py-sm{padding-top:var(--sp-sm);padding-bottom:var(--sp-sm)}
+.py-md{padding-top:var(--sp-md);padding-bottom:var(--sp-md)}
+.py-lg{padding-top:var(--sp-lg);padding-bottom:var(--sp-lg)}
+.py-xl{padding-top:var(--sp-xl);padding-bottom:var(--sp-xl)}
+.py-1{padding-top:0.25rem;padding-bottom:0.25rem}
+.pt-sm{padding-top:var(--sp-sm)}
+.pt-lg{padding-top:var(--sp-lg)}
+.pb-sm{padding-bottom:var(--sp-sm)}
+.pb-xl{padding-bottom:var(--sp-xl)}
+.pb-1{padding-bottom:0.25rem}
+.pl-xl{padding-left:var(--sp-xl)}
+.pr-md{padding-right:var(--sp-md)}
+.pt-md{padding-top:var(--sp-md)}
+.mb-xs{margin-bottom:var(--sp-xs)}
+.mb-sm{margin-bottom:var(--sp-sm)}
+.mb-md{margin-bottom:var(--sp-md)}
+.mb-lg{margin-bottom:var(--sp-lg)}
+.mb-xl{margin-bottom:var(--sp-xl)}
+.mt-sm{margin-top:var(--sp-sm)}
+.mt-md{margin-top:var(--sp-md)}
+.mt-lg{margin-top:var(--sp-lg)}
+.mt-xl{margin-top:var(--sp-xl)}
+.ml-xs{margin-left:var(--sp-xs)}
+.mx-auto{margin-left:auto;margin-right:auto}
+.gap-xs{gap:var(--sp-xs)}
+.gap-sm{gap:var(--sp-sm)}
+.gap-md{gap:var(--sp-md)}
+.gap-lg{gap:var(--sp-lg)}
+.space-y-xs>*+*{margin-top:var(--sp-xs)}
+.space-y-sm>*+*{margin-top:var(--sp-sm)}
+.space-y-md>*+*{margin-top:var(--sp-md)}
+.space-y-lg>*+*{margin-top:var(--sp-lg)}
+.space-y-xl>*+*{margin-top:var(--sp-xl)}
+
+/* ── LAYOUT ──────────────────────────────────────────────────────── */
+.flex{display:flex}
+.inline-flex{display:inline-flex}
+.grid{display:grid}
+.block{display:block}
+.inline-block{display:inline-block}
+.hidden{display:none!important}
+
+.flex-col{flex-direction:column}
+.flex-row{flex-direction:row}
+.flex-wrap{flex-wrap:wrap}
+.flex-grow{flex-grow:1}
+.flex-shrink-0{flex-shrink:0}
+.items-center{align-items:center}
+.items-start{align-items:flex-start}
+.items-end{align-items:flex-end}
+.items-baseline{align-items:baseline}
+.justify-center{justify-content:center}
+.justify-between{justify-content:space-between}
+.justify-end{justify-content:flex-end}
+.justify-start{justify-content:flex-start}
+.self-center{align-self:center}
+
+.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}
+.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+.w-full{width:100%}
+.w-5{width:1.25rem}
+.w-6{width:1.5rem}
+.w-8{width:2rem}
+.w-10{width:2.5rem}
+.w-12{width:3rem}
+.w-14{width:3.5rem}
+.w-16{width:4rem}
+.w-20{width:5rem}
+.w-24{width:6rem}
+.w-48{width:12rem}
+.h-3{height:0.75rem}
+.h-5{height:1.25rem}
+.h-8{height:2rem}
+.h-10{height:2.5rem}
+.h-12{height:3rem}
+.h-14{height:3.5rem}
+.h-16{height:4rem}
+.h-20{height:5rem}
+.h-24{height:6rem}
+.h-48{height:12rem}
+.h-full{height:100%}
+.min-h-screen{min-height:100vh}
+.min-h-80{min-height:20rem}
+.min-w-0{min-width:0}
+.max-w-xl{max-width:36rem}
+.max-w-md{max-width:28rem}
+.max-w-container-max{max-width:var(--container-max)}
+
+/* container helpers */
+.px-gutter{padding-left:var(--sp-gutter);padding-right:var(--sp-gutter)}
+.py-lg{padding-top:var(--sp-lg);padding-bottom:var(--sp-lg)}
+
+/* ── POSITION ────────────────────────────────────────────────────── */
+.relative{position:relative}
+.absolute{position:absolute}
+.fixed{position:fixed}
+.sticky{position:sticky}
+.inset-0{top:0;right:0;bottom:0;left:0}
+.top-0{top:0}
+.top-sm{top:var(--sp-sm)}
+.top-lg{top:var(--sp-lg)}
+.bottom-0{bottom:0}
+.bottom-md{bottom:var(--sp-md)}
+.left-0{left:0}
+.left-md{left:var(--sp-md)}
+.right-0{right:0}
+.right-md{right:var(--sp-md)}
+.right-lg{right:var(--sp-lg)}
+.top-8{top:2rem}
+.right-8{right:2rem}
+.z-10{z-index:10}
+.z-20{z-index:20}
+.z-30{z-index:30}
+.z-50{z-index:50}
+.z-9999{z-index:9999}
+
+/* ── OVERFLOW ────────────────────────────────────────────────────── */
+.overflow-hidden{overflow:hidden}
+.overflow-x-auto{overflow-x:auto}
+.overflow-auto{overflow:auto}
+
+/* ── DISPLAY/VISIBILITY ──────────────────────────────────────────── */
+.pointer-events-none{pointer-events:none}
+.select-none{user-select:none}
+.cursor-pointer{cursor:pointer}
+
+/* ── TEXT UTILITIES ──────────────────────────────────────────────── */
+.text-center{text-align:center}
+.text-left{text-align:left}
+.text-right{text-align:right}
+.italic{font-style:italic}
+.uppercase{text-transform:uppercase}
+.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.whitespace-nowrap{white-space:nowrap}
+.tracking-tighter{letter-spacing:-0.05em}
+.tracking-tight{letter-spacing:-0.025em}
+.tracking-widest{letter-spacing:0.1em}
+.leading-tight{line-height:1.25}
+.font-black{font-weight:900}
+.font-bold{font-weight:700}
+.font-medium{font-weight:500}
+.font-normal{font-weight:400}
+
+/* font-size scale */
+.text-xs{font-size:0.75rem;line-height:1rem}
+.text-sm{font-size:0.875rem;line-height:1.25rem}
+.text-base{font-size:1rem;line-height:1.5rem}
+.text-lg{font-size:1.125rem;line-height:1.75rem}
+.text-xl{font-size:1.25rem;line-height:1.75rem}
+.text-2xl{font-size:1.5rem;line-height:2rem}
+.text-3xl{font-size:1.875rem;line-height:2.25rem}
+.text-4xl{font-size:2.25rem;line-height:2.5rem}
+.text-5xl{font-size:3rem;line-height:1}
+.text-6xl{font-size:3.75rem;line-height:1}
+
+/* drop shadow text */
+.drop-shadow-xl{text-shadow:0 20px 13px rgba(0,0,0,.5),0 8px 5px rgba(0,0,0,.3)}
+.drop-shadow-lg{text-shadow:0 10px 8px rgba(0,0,0,.5),0 4px 3px rgba(0,0,0,.3)}
+
+/* ── OPACITY ─────────────────────────────────────────────────────── */
+.opacity-10{opacity:0.1}
+.opacity-20{opacity:0.2}
+.opacity-30{opacity:0.3}
+.opacity-40{opacity:0.4}
+.opacity-60{opacity:0.6}
+.opacity-80{opacity:0.8}
+.opacity-0{opacity:0}
+
+/* ── OBJECT FIT ──────────────────────────────────────────────────── */
+.object-cover{object-fit:cover}
+.object-contain{object-fit:contain}
+
+/* ── ASPECT RATIO ────────────────────────────────────────────────── */
+.aspect-video{aspect-ratio:16/9}
+.aspect-square{aspect-ratio:1}
+
+/* ── SHADOWS ─────────────────────────────────────────────────────── */
+.shadow-nav{box-shadow:4px 4px 0px 0px rgba(0,0,0,1)}
+
+/* ── TRANSITIONS ─────────────────────────────────────────────────── */
+.transition{transition:all 0.15s ease}
+.transition-all{transition:all 0.2s ease}
+.transition-colors{transition:color 0.15s ease,background-color 0.15s ease,border-color 0.15s ease}
+.transition-opacity{transition:opacity 0.15s ease}
+.transition-transform{transition:transform 0.15s ease}
+.duration-500{transition-duration:500ms}
+.duration-700{transition-duration:700ms}
+
+/* ── ANIMATIONS ──────────────────────────────────────────────────── */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.animate-pulse{animation:pulse 2s cubic-bezier(0.4,0,0.6,1) infinite}
+@keyframes bounce{0%,100%{transform:translateY(-25%);animation-timing-function:cubic-bezier(0.8,0,1,1)}50%{transform:none;animation-timing-function:cubic-bezier(0,0,0.2,1)}}
+.animate-bounce{animation:bounce 1s infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.animate-spin{animation:spin 1s linear infinite}
+
+/* ── TRANSFORMS ──────────────────────────────────────────────────── */
+.scale-95{transform:scale(0.95)}
+.scale-105{transform:scale(1.05)}
+.-translate-y-0\.5{transform:translateY(-2px)}
+.-translate-y-1{transform:translateY(-4px)}
+.-translate-y-1\/2{transform:translateY(-50%)}
+.grayscale{filter:grayscale(100%)}
+
+/* ── HOVER STATES ────────────────────────────────────────────────── */
+.hover\:text-primary:hover{color:var(--clr-primary)}
+.hover\:text-secondary:hover{color:var(--clr-secondary)}
+.hover\:text-tertiary:hover{color:var(--clr-tertiary)}
+.hover\:text-on-tertiary:hover{color:var(--clr-on-tertiary)}
+.hover\:text-on-secondary:hover{color:var(--clr-on-secondary)}
+.hover\:text-white:hover{color:#fff}
+.hover\:bg-primary:hover{background-color:var(--clr-primary)}
+.hover\:bg-secondary:hover{background-color:var(--clr-secondary)}
+.hover\:bg-tertiary:hover{background-color:var(--clr-tertiary)}
+.hover\:bg-secondary-container:hover{background-color:var(--clr-secondary-container)}
+.hover\:bg-surface-container-high:hover{background-color:var(--clr-surface-container-high)}
+.hover\:bg-error-container:hover{background-color:var(--clr-error-container)}
+.hover\:bg-surface-container-highest:hover{background-color:var(--clr-surface-container-highest)}
+.hover\:border-primary:hover{border-color:var(--clr-primary)!important}
+.hover\:border-tertiary:hover{border-color:var(--clr-tertiary)}
+.hover\:border-secondary:hover{border-color:var(--clr-secondary)}
+.hover\:text-on-secondary-container:hover{color:var(--clr-on-secondary-container)}
+.hover\:underline:hover{text-decoration:underline}
+.hover\:opacity-90:hover{opacity:0.9}
+.hover\:opacity-80:hover{opacity:0.8}
+.hover\:-translate-y-0\.5:hover{transform:translateY(-2px)}
+.hover\:-translate-y-1:hover{transform:translateY(-4px)}
+.hover\:translate-y-\[-2px\]:hover{transform:translateY(-2px)}
+.hover\:scale-105:hover{transform:scale(1.05)}
+.hover\:grayscale-0:hover{filter:none}
+
+/* ── GROUP HOVER ─────────────────────────────────────────────────── */
+.group:hover .group-hover\:opacity-100{opacity:1}
+.group:hover .group-hover\:text-tertiary{color:var(--clr-tertiary)}
+.group:hover .group-hover\:scale-105{transform:scale(1.05)}
+.group-hover\:opacity-100{opacity:0;transition:opacity 0.2s}
+.group-hover\:text-tertiary{transition:color 0.15s}
+.group-hover\:scale-105{transition:transform 0.5s}
+
+/* ── FOCUS ───────────────────────────────────────────────────────── */
+.focus\:border-primary:focus{border-color:var(--clr-primary)!important;outline:none}
+
+/* ── ACTIVE ──────────────────────────────────────────────────────── */
+.active\:scale-95:active{transform:scale(0.95)}
+
+/* ── PLACEHOLDER ─────────────────────────────────────────────────── */
+.placeholder\:text-outline-variant::placeholder{color:var(--clr-outline-variant)}
+.placeholder\:text-on-surface-variant\/50::placeholder{color:rgba(212,192,215,0.5)}
+
+/* ── DECORATION ──────────────────────────────────────────────────── */
+.decoration-secondary{text-decoration-color:var(--clr-secondary)}
+.decoration-2{text-decoration-thickness:2px}
+
+/* ── MATERIAL SYMBOLS ────────────────────────────────────────────── */
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;vertical-align:middle;font-size:24px;display:inline-flex;align-items:center;justify-content:center}
+.fill-icon{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24}
+.text-\[10px\]{font-size:10px}
+.text-\[16px\]{font-size:16px}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────── */
+@media(min-width:640px){
+  .sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sm\:text-left{text-align:left}
+  .sm\:items-start{align-items:flex-start}
+}
+@media(min-width:768px){
+  .md\:flex{display:flex}
+  .md\:hidden{display:none}
+  .md\:flex-row{flex-direction:row}
+  .md\:items-center{align-items:center}
+  .md\:items-start{align-items:flex-start}
+  .md\:text-left{text-align:left}
+  .md\:w-3\/4{width:75%}
+  .md\:w-2\/3{width:66.666%}
+  .md\:justify-start{justify-content:flex-start}
+  .md\:mb-0{margin-bottom:0}
+  .md\:mt-0{margin-top:0}
+  .text-headline-lg{font-size:clamp(28px,4vw,40px)}
+}
+@media(min-width:1024px){
+  .lg\:flex{display:flex}
+  .lg\:hidden{display:none!important}
+  .lg\:block{display:block}
+  .lg\:col-span-4{grid-column:span 4/span 4}
+  .lg\:col-span-5{grid-column:span 5/span 5}
+  .lg\:col-span-7{grid-column:span 7/span 7}
+  .lg\:col-span-8{grid-column:span 8/span 8}
+  .lg\:col-span-12{grid-column:span 12/span 12}
+  .lg\:grid-cols-12{grid-template-columns:repeat(12,minmax(0,1fr))}
+  .lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .lg\:mt-0{margin-top:0}
+  .lg\:mt-8{margin-top:2rem}
+  .lg\:mt-12{margin-top:3rem}
+}
+@media(min-width:1280px){
+  .xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+
+/* ── GAMECLOUD COMPONENT STYLES ──────────────────────────────────── */
+/* Shadows */
+.pop-out-shadow{box-shadow:4px 4px 0px 0px rgba(0,0,0,1)}
+.pop-out-hover:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0px 0px rgba(0,0,0,1),0 0 15px rgba(236,178,255,0.3)}
+.hard-shadow{box-shadow:4px 4px 0px 0px rgba(0,0,0,1)}
+.hard-shadow-hover:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0px 0px rgba(0,0,0,1)}
+.shadow-\[4px_4px_0px_0px_rgba\(0\,0\,0\,1\)\]{box-shadow:4px 4px 0px 0px rgba(0,0,0,1)}
+
+/* Glow effects */
+.glow-lime{box-shadow:0 0 15px rgba(50,255,0,0.4)}
+.glow-purple{box-shadow:0 0 15px rgba(236,178,255,0.4)}
+.neon-border{border:1px solid rgba(0,219,233,0.4)}
+
+/* Animated patterns */
+@keyframes stripe-move{0%{background-position:0 0}100%{background-position:20px 0}}
+@keyframes stripe-move-40{0%{background-position:0 0}100%{background-position:40px 0}}
+.xp-bar-stripe{background-image:linear-gradient(45deg,rgba(255,255,255,0.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.15) 50%,rgba(255,255,255,0.15) 75%,transparent 75%);background-size:20px 20px;animation:stripe-move 1s linear infinite}
+.xp-bar-purple{background:linear-gradient(45deg,rgba(189,0,255,1) 25%,rgba(236,178,255,1) 25%,rgba(236,178,255,1) 50%,rgba(189,0,255,1) 50%,rgba(189,0,255,1) 75%,rgba(236,178,255,1) 75%);background-size:40px 40px;animation:stripe-move-40 1.5s linear infinite}
+.diagonal-stripes{background-image:linear-gradient(45deg,rgba(255,255,255,0.1) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 75%,transparent 75%);background-size:20px 20px;animation:stripe-move 2s linear infinite}
+
+/* Vibrate */
+@keyframes vibrate{0%{transform:translate(0,0)}25%{transform:translate(1px,-1px)}50%{transform:translate(-1px,1px)}75%{transform:translate(1px,1px)}100%{transform:translate(0,0)}}
+.vibrate-hover:hover{animation:vibrate 0.1s linear infinite}
+
+/* Scanline */
+.scanline{background:linear-gradient(to bottom,transparent 50%,rgba(0,219,233,0.05) 50%);background-size:100% 4px}
+
+/* Page system */
+[data-page]{display:none}
+[data-page].active{display:block}
+
+/* Nav */
+.nav-link{transition:all 0.15s;font-family:'Anybody',sans-serif;font-size:18px;font-weight:700;color:var(--clr-on-surface-variant);background:none;border:none;cursor:pointer;padding:0}
+.nav-link.active{color:var(--clr-secondary);border-bottom:2px solid var(--clr-secondary);padding-bottom:4px}
+
+/* Toast */
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* Game card */
+.game-card{transition:all 0.2s;cursor:pointer}
+.game-card:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0px 0px rgba(0,0,0,1),0 0 15px rgba(236,178,255,0.2)}
+
+/* Slide in page animation */
+@keyframes slideIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+.slide-in{animation:slideIn 0.25s ease-out}
+
+/* Rating stars */
+.rating-stars{display:inline-flex}
+.rating-stars .star-interactive{font-size:28px;cursor:pointer;color:var(--clr-outline-variant);transition:color 0.1s}
+.rating-stars .star-interactive.lit{color:#32ff00}
+
+/* Upload drop zone */
+.upload-drop-active{border-color:var(--clr-primary)!important;background:rgba(236,178,255,0.05)!important}
+
+/* Filter chips */
+.filter-chip{cursor:pointer;transition:all 0.15s}
+.filter-chip.active{background:rgba(0,219,233,0.15);border-color:var(--clr-tertiary);color:var(--clr-tertiary)}
+
+/* Category buttons */
+.category-btn.selected{background:rgba(236,178,255,0.15);border-color:var(--clr-primary);color:var(--clr-primary)}
+
+/* Profile tabs */
+.profile-tab{background:none;border:none;cursor:pointer;font-family:'Anybody',sans-serif;font-size:18px;font-weight:700;color:var(--clr-on-surface-variant);transition:all 0.15s;padding-bottom:0.5rem}
+.profile-tab.active{color:var(--clr-secondary);border-bottom:2px solid var(--clr-secondary)}
+
+/* Leaderboard podium */
+.rank-1{background:linear-gradient(135deg,rgba(50,255,0,0.1),transparent);border-color:#32ff00}
+.rank-2{background:linear-gradient(135deg,rgba(236,178,255,0.1),transparent);border-color:#ecb2ff}
+.rank-3{background:linear-gradient(135deg,rgba(0,219,233,0.1),transparent);border-color:#00dbe9}
+
+/* Form inputs */
+input[type=text],input[type=email],input[type=password],textarea,select{width:100%;background:var(--clr-surface-container-highest);border:2px solid var(--clr-outline-variant);border-radius:var(--radius);padding:var(--sp-sm) var(--sp-md);color:var(--clr-on-surface);font-family:'Rubik',sans-serif;font-size:16px;transition:border-color 0.15s}
+input[type=text]:focus,textarea:focus,input[type=email]:focus{border-color:var(--clr-primary);outline:none}
+
+/* ── INLINE STYLE FALLBACK HELPERS ───────────────────────────────── */
+/* These are for any inline style shortcuts we need */
+.min-h-\[400px\]{min-height:400px}
+.min-h-\[500px\]{min-height:500px}
+.min-h-80{min-height:20rem}
+.h-\[500px\]{height:500px}
+.w-\[42\%\]{width:42%}
+.w-\[68\%\]{width:68%}
+.w-3\/5{width:60%}
+.w-2\/3{width:66.666%}
+.w-3\/4{width:75%}
+.col-span-3{grid-column:span 3/span 3}
+
+/* Gradient bg for hero */
+.bg-gradient-to-br{background:linear-gradient(135deg,#4a0072 0%,#131313 50%,#002a2e 100%)}
+.from-purple-900.via-background.to-teal-900{background:linear-gradient(135deg,#4a0072 0%,#131313 50%,#002a2e 100%)}
+.from-surface-container.to-background{background:linear-gradient(135deg,var(--clr-surface-container),var(--clr-background))}
+.from-primary-container.to-tertiary-container{background:linear-gradient(135deg,var(--clr-primary-container),var(--clr-tertiary-container))}
+
+/* ── MOBILE BOTTOM NAV COMPENSATION ─────────────────────────────── */
+@media(max-width:639px){
+  .px-gutter{padding-left:16px;padding-right:16px}
+}
+
+
+
+/* ── ADDITIONAL PRODUCTION FIXES ────────────────────────────────── */
+/* Fix for grid columns in the game detail layout */
+@media(min-width:1024px){
+  .lg\:col-span-4{grid-column:span 4/span 4}
+  .lg\:col-span-5{grid-column:span 5/span 5}
+  .lg\:col-span-7{grid-column:span 7/span 7}
+  .lg\:col-span-8{grid-column:span 8/span 8}
+}
+/* Fix placeholder color for text-on-surface-variant with opacity */
+::placeholder{color:rgba(212,192,215,0.5)}
+/* Fix body bg and color applied via class */
+body.bg-background{background-color:var(--clr-background)}
+body.text-on-background{color:var(--clr-on-background)}
+body.min-h-screen{min-height:100vh}
+/* Fix gradient backgrounds */
+.bg-gradient-to-br.from-purple-900{background:linear-gradient(135deg,#3b0764 0%,#131313 50%,#042f2e 100%)}
+/* Mobile nav spacing */
+nav .font-headline-lg{font-family:'Anybody',sans-serif;font-weight:800}
+/* Overflow fix for upload drop zone text */
+strong{font-weight:700}
+em{font-style:italic}
+/* Fix for outline:none on inputs */
+input:focus,textarea:focus,select:focus{outline:none}
+/* Ensure hidden works properly */
+.hidden{display:none!important}
+/* Sticky nav z-index */
+nav.sticky{position:sticky;top:0;z-index:50}
+/* Footer adjustments */
+footer{margin-top:var(--sp-xl)}
+
+
+/* ── MOBILE BOTTOM NAV ────────────────────────────────────────── */
+.mobile-bottom-nav{
+  display:none;
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:100;
+  background:var(--clr-surface-container-lowest);
+  border-top:2px solid var(--clr-outline-variant);
+  padding:8px 0 env(safe-area-inset-bottom, 8px);
+  justify-content:space-around;
+  align-items:center;
+  box-shadow:0 -4px 0 0 rgba(0,0,0,1);
+}
+.mobile-nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:4px 8px;
+  color:var(--clr-on-surface-variant);
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  font-weight:500;
+  background:none;border:none;cursor:pointer;
+  transition:color 0.15s;
+  min-width:48px;
+}
+.mobile-nav-btn .material-symbols-outlined{font-size:22px}
+.mobile-nav-btn.active,.mobile-nav-btn:hover{color:var(--clr-tertiary)}
+.mobile-nav-cta{color:var(--clr-secondary-container)!important}
+.mobile-nav-cta:hover{color:var(--clr-secondary)!important}
+@media(max-width:1023px){
+  .mobile-bottom-nav{display:flex}
+  body{padding-bottom:70px}
+}
+
+</style>
+<style>
+  .pop-out-shadow { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
+  .pop-out-hover:hover { transform: translate(-2px,-2px); box-shadow: 8px 8px 0px 0px rgba(0,0,0,1), 0 0 15px rgba(236,178,255,0.3); }
+  .hard-shadow { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
+  .hard-shadow-hover:hover { transform: translate(-2px,-2px); box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); }
+  .neon-border { border: 1px solid rgba(0,219,233,0.4); }
+  .glow-lime { box-shadow: 0 0 15px rgba(50,255,0,0.4); }
+  .glow-purple { box-shadow: 0 0 15px rgba(236,178,255,0.4); }
+  .xp-bar-stripe {
+    background-image: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%);
+    background-size: 20px 20px;
+    animation: stripe-move 1s linear infinite;
+  }
+  @keyframes stripe-move { 0%{background-position:0 0} 100%{background-position:20px 0} }
+  .xp-bar-purple {
+    background: linear-gradient(45deg, rgba(189,0,255,1) 25%, rgba(236,178,255,1) 25%, rgba(236,178,255,1) 50%, rgba(189,0,255,1) 50%, rgba(189,0,255,1) 75%, rgba(236,178,255,1) 75%);
+    background-size: 40px 40px;
+    animation: stripe-move 1.5s linear infinite;
+  }
+  .vibrate-hover:hover { animation: vibrate 0.1s linear infinite; }
+  @keyframes vibrate { 0%{transform:translate(0,0)} 25%{transform:translate(1px,-1px)} 50%{transform:translate(-1px,1px)} 75%{transform:translate(1px,1px)} 100%{transform:translate(0,0)} }
+  .scanline { background: linear-gradient(to bottom, transparent 50%, rgba(0,219,233,0.05) 50%); background-size: 100% 4px; }
+  .diagonal-stripes {
+    background-image: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%);
+    background-size: 20px 20px;
+    animation: stripe-move 2s linear infinite;
+  }
+  .star-rating { display:inline-flex; gap:2px; }
+  .star-rating span { color: #ecb2ff; font-size:18px; cursor:pointer; transition: color 0.15s; }
+  .star-rating span.active { color: #32ff00; }
+  .star-rating span:hover, .star-rating span:hover ~ span { color: #ecb2ff; }
+  .star-rating:not(:has(span:hover)) span.active { color: #32ff00; }
+  [data-page] { display: none; }
+  [data-page].active { display: block; }
+  .nav-link { transition: all 0.15s; }
+  .nav-link.active { color: #edffe1; border-bottom: 2px solid #edffe1; padding-bottom: 4px; }
+  .toast { position:fixed; bottom:2rem; right:2rem; z-index:9999; transform:translateY(100px); opacity:0; transition: all 0.3s; pointer-events:none; }
+  .toast.show { transform:translateY(0); opacity:1; }
+  .category-btn.selected { background: rgba(236,178,255,0.15); border-color: #ecb2ff; color: #ecb2ff; }
+  .tag-chip.selected { background: rgba(0,219,233,0.15); border-color: #00dbe9; color: #00dbe9; }
+  .game-card { transition: all 0.2s; }
+  .game-card:hover { transform: translate(-2px,-2px); box-shadow: 8px 8px 0px 0px rgba(0,0,0,1), 0 0 15px rgba(236,178,255,0.2); }
+  .rank-1 { background: linear-gradient(135deg, rgba(50,255,0,0.1), transparent); border-color: #32ff00; }
+  .rank-2 { background: linear-gradient(135deg, rgba(236,178,255,0.1), transparent); border-color: #ecb2ff; }
+  .rank-3 { background: linear-gradient(135deg, rgba(0,219,233,0.1), transparent); border-color: #00dbe9; }
+  .upload-drop-active { border-color: #ecb2ff !important; background: rgba(236,178,255,0.05) !important; }
+  .iframe-container { position:relative; width:100%; aspect-ratio:16/9; }
+  .iframe-container iframe { position:absolute; inset:0; width:100%; height:100%; border:none; border-radius:1rem; }
+  .slide-in { animation: slideIn 0.25s ease-out; }
+  @keyframes slideIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .rating-stars { display:inline-flex; }
+  .rating-stars .star-interactive { font-size:28px; cursor:pointer; color: #514255; transition: color 0.1s; }
+  .rating-stars .star-interactive.lit { color: #32ff00; }
+  .profile-tab.active { color:#edffe1; border-bottom:2px solid #edffe1; }
+  .filter-chip { cursor:pointer; transition:all 0.15s; }
+  .filter-chip.active { background:rgba(0,219,233,0.15); border-color:#00dbe9; color:#00dbe9; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill-icon { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:#131313; }
+  ::-webkit-scrollbar-thumb { background:#353534; border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover { background:#514255; }
+</style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast">
+  <div class="bg-surface-container-highest border border-outline-variant pop-out-shadow rounded-full px-lg py-sm flex items-center gap-sm text-on-surface font-label-mono text-label-mono">
+    <span class="material-symbols-outlined fill-icon text-secondary" id="toast-icon">check_circle</span>
+    <span id="toast-msg">Action complete!</span>
+  </div>
+</div>
+
+<!-- TOP NAV -->
+<nav class="sticky top-0 z-50 bg-background border-b border-outline-variant shadow-nav">
+  <div class="flex justify-between items-center w-full px-gutter py-md max-w-container-max mx-auto">
+    <div class="flex items-center gap-lg">
+      <button onclick="navigate('home')" class="font-headline-lg text-primary italic tracking-tighter hover:opacity-80 transition-opacity text-2xl md:text-headline-lg">GameCloud</button>
+      <div class="hidden md:flex gap-md items-center">
+        <button onclick="navigate('home')" class="nav-link font-button-text text-button-text text-on-surface-variant hover:text-tertiary hover:-translate-y-0.5 transition-all" data-nav="home">Explore</button>
+        <button onclick="navigate('community')" class="nav-link font-button-text text-button-text text-on-surface-variant hover:text-tertiary hover:-translate-y-0.5 transition-all" data-nav="community">Community</button>
+        <button onclick="navigate('leaderboard')" class="nav-link font-button-text text-button-text text-on-surface-variant hover:text-tertiary hover:-translate-y-0.5 transition-all" data-nav="leaderboard">Leaderboards</button>
+        <button onclick="navigate('profile')" class="nav-link font-button-text text-button-text text-on-surface-variant hover:text-tertiary hover:-translate-y-0.5 transition-all" data-nav="profile">Profile</button>
+      </div>
+    </div>
+    <div class="flex items-center gap-md">
+      <button onclick="navigate('upload')" class="hidden lg:flex items-center gap-xs bg-secondary-container text-on-secondary-container px-md py-xs rounded-full font-button-text text-button-text vibrate-hover pop-out-shadow transition-all glow-lime">
+        <span class="material-symbols-outlined text-xl">upload</span> Upload Game
+      </button>
+      <div class="flex gap-sm">
+        <button class="p-xs text-on-surface-variant hover:text-primary transition-colors" onclick="showToast('No new notifications... yet! 🔔', 'notifications')">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <button class="p-xs text-on-surface-variant hover:text-primary transition-colors" onclick="navigate('profile')">
+          <span class="material-symbols-outlined">person</span>
+        </button>
+        <button class="p-xs text-on-surface-variant hover:text-tertiary transition-colors md:hidden" onclick="navigate('community')">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAGE: HOME                                       -->
+<!-- ═══════════════════════════════════════════════ -->
+<div data-page="home" class="active">
+  <main class="max-w-container-max mx-auto px-gutter py-lg space-y-xl slide-in">
+
+    <!-- ── LIMELIGHT HERO HEADLINE ── -->
+    <section style="position:relative;border-radius:var(--radius-lg);overflow:hidden;border:2px solid var(--clr-outline-variant);box-shadow:6px 6px 0 0 rgba(0,0,0,1);min-height:520px;display:flex;flex-direction:column;justify-content:center;">
+      <!-- Deep layered background -->
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 60%, rgba(189,0,255,0.35) 0%, transparent 55%), radial-gradient(ellipse at 80% 30%, rgba(0,219,233,0.25) 0%, transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(50,255,0,0.1) 0%, transparent 50%), #0e0e0e;"></div>
+      <div style="position:absolute;inset:0;" class="scanline opacity-30 pointer-events-none"></div>
+      <!-- Animated grid lines -->
+      <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(236,178,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(236,178,255,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;"></div>
+
+      <!-- ASCII corner decoration -->
+      <div style="position:absolute;top:24px;right:24px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--clr-outline-variant);opacity:0.4;line-height:1.6;user-select:none;" class="hidden lg:block">
+        ╔══════════════╗<br>
+        ║ GAME  CLOUD  ║<br>
+        ║ ▓▓▓▓▓▓▓▓░░░ ║<br>
+        ║  XP: 999999  ║<br>
+        ║ [PLAY  MODE] ║<br>
+        ╚══════════════╝
+      </div>
+
+      <!-- Live ticker -->
+      <div style="position:absolute;top:0;left:0;right:0;background:rgba(0,0,0,0.6);border-bottom:1px solid var(--clr-outline-variant);padding:6px var(--sp-lg);display:flex;gap:var(--sp-lg);overflow:hidden;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--clr-secondary-container);letter-spacing:0.1em;white-space:nowrap;animation:marquee 20s linear infinite;">
+          🔴 LIVE &nbsp;•&nbsp; 2,847 GAMES IN THE VAULT &nbsp;•&nbsp; 94k PLAYERS ONLINE &nbsp;•&nbsp; 4.1M TOTAL PLAYS &nbsp;•&nbsp; 🔥 NEON OVERDRIVE IS TRENDING &nbsp;•&nbsp; ⭐ NEW DROPS EVERY DAY &nbsp;•&nbsp; 🎮 UPLOAD YOUR GAME NOW &nbsp;•&nbsp;
+        </span>
+      </div>
+
+      <!-- Main headline content -->
+      <div style="position:relative;z-index:2;padding:var(--sp-xl) var(--sp-lg) var(--sp-lg);max-width:800px;margin-top:32px;">
+        <!-- Eyebrow label -->
+        <div style="display:inline-flex;align-items:center;gap:var(--sp-xs);background:var(--clr-primary-container);color:white;padding:6px var(--sp-sm);border-radius:var(--radius-full);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:var(--sp-md);box-shadow:3px 3px 0 0 rgba(0,0,0,1);">
+          <span class="material-symbols-outlined fill-icon" style="font-size:14px">rocket_launch</span>
+          The Internet's Free Arcade — Play, Share &amp; Compete
+        </div>
+
+        <!-- The Big Headline -->
+        <h1 style="font-family:'Anybody',sans-serif;font-weight:900;font-size:clamp(36px,7vw,76px);line-height:1.05;letter-spacing:-0.02em;margin-bottom:var(--sp-md);">
+          <span style="color:var(--clr-secondary);">UPLOAD.</span>
+          <span style="color:var(--clr-primary);"> PLAY.</span>
+          <br>
+          <span style="color:var(--clr-tertiary);">DOMINATE</span>
+          <span style="color:var(--clr-on-surface);"> THE</span>
+          <span style="color:var(--clr-secondary-container);"> VAULT.</span>
+        </h1>
+
+        <!-- Sub-headline that explains the site -->
+        <p style="font-family:'Rubik',sans-serif;font-size:clamp(15px,2vw,19px);color:var(--clr-on-surface-variant);max-width:580px;line-height:1.6;margin-bottom:var(--sp-lg);">
+          GameCloud is the <strong style="color:var(--clr-secondary);">free browser arcade</strong> where developers upload HTML games and players discover, rate, and compete — all in one place. No installs. No paywalls. <strong style="color:var(--clr-primary);">Just pure gaming.</strong>
+        </p>
+
+        <!-- CTA Row -->
+        <div style="display:flex;flex-wrap:wrap;gap:var(--sp-md);">
+          <button onclick="navigate('community')" style="display:flex;align-items:center;gap:var(--sp-xs);background:var(--clr-secondary-container);color:var(--clr-on-secondary-container);padding:14px var(--sp-lg);border-radius:var(--radius-full);font-family:'Anybody',sans-serif;font-weight:700;font-size:18px;box-shadow:4px 4px 0 0 rgba(0,0,0,1),0 0 20px rgba(50,255,0,0.3);transition:all 0.15s;cursor:pointer;border:none;" class="vibrate-hover">
+            <span class="material-symbols-outlined fill-icon">sports_esports</span> EXPLORE GAMES
+          </button>
+          <button onclick="navigate('upload')" style="display:flex;align-items:center;gap:var(--sp-xs);background:transparent;color:var(--clr-primary);padding:14px var(--sp-lg);border-radius:var(--radius-full);font-family:'Anybody',sans-serif;font-weight:700;font-size:18px;border:2px solid var(--clr-primary);box-shadow:4px 4px 0 0 rgba(0,0,0,1);transition:all 0.15s;cursor:pointer;" class="hover:bg-primary hover:text-on-primary">
+            <span class="material-symbols-outlined fill-icon">upload</span> UPLOAD YOUR GAME
+          </button>
+        </div>
+
+        <!-- Micro trust signals -->
+        <div style="display:flex;flex-wrap:wrap;gap:var(--sp-md);margin-top:var(--sp-md);">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--clr-on-surface-variant);display:flex;align-items:center;gap:4px;"><span style="color:#32ff00">●</span> Free forever</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--clr-on-surface-variant);display:flex;align-items:center;gap:4px;"><span style="color:#ecb2ff">●</span> HTML5 games only</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--clr-on-surface-variant);display:flex;align-items:center;gap:4px;"><span style="color:#00dbe9">●</span> No account needed to play</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--clr-on-surface-variant);display:flex;align-items:center;gap:4px;"><span style="color:#32ff00">●</span> Community-rated leaderboards</span>
+        </div>
+      </div>
+
+      <!-- Floating featured game badge bottom-right -->
+      <div style="position:absolute;bottom:var(--sp-lg);right:var(--sp-lg);background:rgba(32,31,31,0.95);border:2px solid var(--clr-outline-variant);border-radius:var(--radius-md);padding:var(--sp-sm) var(--sp-md);box-shadow:4px 4px 0 0 rgba(0,0,0,1);cursor:pointer;transition:all 0.2s;max-width:220px;" onclick="navigate('game','neon-overdrive')" class="hard-shadow-hover">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--clr-primary);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">🔥 Featured Game</div>
+        <div style="font-family:'Anybody',sans-serif;font-weight:800;font-size:16px;color:var(--clr-secondary);margin-bottom:2px;">Neon Overdrive</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#32ff00;">★ 4.9</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--clr-on-surface-variant);">12.4k plays</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+
+      <!-- Left Feed -->
+      <div class="lg:col-span-8 space-y-lg">
+
+        <!-- HOT RIGHT NOW -->
+        <section>
+          <div class="flex justify-between items-end mb-md">
+            <h2 class="font-headline-lg text-headline-lg text-primary flex items-center gap-sm" style="font-size:clamp(24px,4vw,40px)">
+              HOT RIGHT NOW <span class="material-symbols-outlined fill-icon text-4xl" style="color:#ff6600">local_fire_department</span>
+            </h2>
+            <button onclick="navigate('community')" class="text-tertiary font-label-mono text-label-mono hover:underline">VIEW ALL →</button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-md" id="hot-games-grid"></div>
+        </section>
+
+        <!-- NEW DROPS -->
+        <section>
+          <div class="flex justify-between items-end mb-md">
+            <h2 class="font-headline-lg text-secondary flex items-center gap-sm" style="font-size:clamp(22px,3.5vw,36px)">
+              NEW DROPS <span class="material-symbols-outlined fill-icon text-3xl">new_releases</span>
+            </h2>
+            <button onclick="navigate('community')" class="text-tertiary font-label-mono text-label-mono hover:underline">VIEW ALL →</button>
+          </div>
+          <div class="space-y-sm" id="new-games-list"></div>
+        </section>
+
+      </div>
+
+      <!-- Right Sidebar -->
+      <div class="lg:col-span-4 space-y-lg">
+
+        <!-- Leaderboard Teaser -->
+        <div class="bg-surface-container rounded-md border border-outline-variant hard-shadow p-md">
+          <h3 class="font-button-text text-button-text text-tertiary mb-md uppercase tracking-widest flex items-center gap-sm">
+            <span class="material-symbols-outlined fill-icon">emoji_events</span> Top Rated
+          </h3>
+          <div class="space-y-sm" id="sidebar-leaderboard"></div>
+          <button onclick="navigate('leaderboard')" class="w-full mt-md bg-surface-container-high border border-outline-variant text-tertiary font-button-text text-sm rounded-full py-sm hover:bg-tertiary hover:text-on-tertiary transition-all pop-out-shadow">
+            FULL LEADERBOARD →
+          </button>
+        </div>
+
+        <!-- Upload CTA -->
+        <div class="bg-gradient-to-br from-surface-container to-background border-2 border-outline-variant rounded-md hard-shadow p-lg text-center overflow-hidden relative">
+          <div class="absolute inset-0 diagonal-stripes opacity-5 pointer-events-none"></div>
+          <span class="material-symbols-outlined fill-icon text-5xl text-secondary block mb-sm animate-bounce">upload</span>
+          <h3 class="font-headline-lg text-secondary mb-xs" style="font-size:24px">GOT A BANGER?</h3>
+          <p class="font-body-md text-on-surface-variant text-sm mb-md">Upload your HTML game and let the community vibe check it.</p>
+          <button onclick="navigate('upload')" class="w-full bg-secondary-container text-on-secondary-container font-button-text text-button-text py-sm rounded-full vibrate-hover pop-out-shadow glow-lime">
+            DROP IT 🔥
+          </button>
+        </div>
+
+        <!-- Stats Widget -->
+        <div class="bg-surface-container-low border border-outline-variant rounded-md p-md hard-shadow">
+          <h3 class="font-label-mono text-xs text-on-surface-variant uppercase tracking-widest mb-md">Community Stats</h3>
+          <div class="grid grid-cols-2 gap-sm">
+            <div class="text-center bg-background-50 rounded-md p-sm">
+              <p class="font-label-mono text-xs text-on-surface-variant">Games</p>
+              <p class="font-headline-lg text-2xl text-primary font-black">2,847</p>
+            </div>
+            <div class="text-center bg-background-50 rounded-md p-sm">
+              <p class="font-label-mono text-xs text-on-surface-variant">Players</p>
+              <p class="font-headline-lg text-2xl text-secondary font-black">94k</p>
+            </div>
+            <div class="text-center bg-background-50 rounded-md p-sm">
+              <p class="font-label-mono text-xs text-on-surface-variant">Ratings</p>
+              <p class="font-headline-lg text-2xl text-tertiary font-black">182k</p>
+            </div>
+            <div class="text-center bg-background-50 rounded-md p-sm">
+              <p class="font-label-mono text-xs text-on-surface-variant">Plays</p>
+              <p class="font-headline-lg text-2xl text-primary font-black">4.1M</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TRENDING SECTION -->
+    <section>
+      <div class="flex justify-between items-end mb-md">
+        <h2 class="font-headline-lg text-primary flex items-center gap-sm" style="font-size:clamp(22px,3.5vw,36px)">
+          TRENDING <span class="material-symbols-outlined fill-icon text-3xl" style="color:#00dbe9">trending_up</span>
+        </h2>
+        <button onclick="navigate('community')" class="text-tertiary font-label-mono text-label-mono hover:underline">SEE ALL →</button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-md" id="trending-grid"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAGE: GAME DETAIL                               -->
+<!-- ═══════════════════════════════════════════════ -->
+<div data-page="game">
+  <main class="max-w-container-max mx-auto px-gutter py-lg slide-in">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-sm text-on-surface-variant font-label-mono text-label-mono mb-lg">
+      <button onclick="navigate('home')" class="hover:text-tertiary transition-colors">Explore</button>
+      <span>/</span>
+      <span class="text-primary" id="game-breadcrumb">Game</span>
+    </div>
+
+    <!-- Game Stage -->
+    <section class="relative group mb-xl">
+      <div class="w-full bg-surface-container-high rounded-lg overflow-hidden border-2 border-outline-variant hard-shadow" style="aspect-ratio:16/9; position:relative;">
+        <div class="absolute inset-0 scanline opacity-20 pointer-events-none z-10"></div>
+        <div id="game-play-area" class="absolute inset-0 flex flex-col items-center justify-center bg-black">
+          <!-- Play area content injected by loadGamePage() -->
+        </div>
+        <!-- Controls overlay -->
+        <div class="absolute bottom-md right-md flex gap-sm z-30">
+          <button class="p-sm bg-surface-80 rounded-full text-white hover:bg-primary transition-colors" onclick="toggleFullscreen()" title="Fullscreen">
+            <span class="material-symbols-outlined">fullscreen</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game Info Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+
+      <!-- Left: Details -->
+      <div class="lg:col-span-8 space-y-lg">
+
+        <!-- Title & Hype -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-md bg-surface-container rounded-md p-md border border-outline-variant hard-shadow">
+          <div>
+            <h2 class="font-headline-lg text-secondary" style="font-size:clamp(22px,3.5vw,40px)" id="game-full-title">—</h2>
+            <p class="font-body-md text-on-surface-variant italic">Developed by <span class="text-tertiary" id="game-author">@unknown</span></p>
+          </div>
+          <div class="flex items-center gap-md">
+            <button id="hype-btn" class="flex items-center gap-xs px-md py-sm bg-surface-container-highest text-secondary rounded-md border border-outline-variant hover:bg-secondary-container hover:text-on-secondary-container transition-all hard-shadow" onclick="hypeGame(this)">
+              <span class="material-symbols-outlined fill-icon">thumb_up</span>
+              <span class="hype-label font-button-text text-xs mr-xs">HYPE</span>
+              <span class="hype-count font-button-text" id="game-hype">0</span>
+            </button>
+            <button class="flex items-center gap-xs px-md py-sm bg-surface-container-highest text-on-surface-variant rounded-md border border-outline-variant hover:bg-error-container hover:text-white transition-all hard-shadow">
+              <span class="material-symbols-outlined">thumb_down</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="bg-surface-container rounded-md p-lg border border-outline-variant hard-shadow">
+          <h3 class="font-button-text text-button-text text-primary mb-md flex items-center gap-sm">
+            <span class="material-symbols-outlined">description</span> Mission Briefing
+          </h3>
+          <p class="font-body-md text-on-surface mb-md" id="game-description">Loading game info...</p>
+          <div class="flex flex-wrap gap-sm" id="game-tags"></div>
+        </div>
+
+        <!-- Star Rating -->
+        <div class="bg-surface-container rounded-md p-lg border border-outline-variant hard-shadow">
+          <h3 class="font-button-text text-button-text text-secondary mb-md flex items-center gap-sm">
+            <span class="material-symbols-outlined fill-icon">star</span> Rate This Banger
+          </h3>
+          <div class="flex items-center gap-lg">
+            <div class="rating-stars" id="star-rater">
+              <span class="star-interactive material-symbols-outlined fill-icon" data-v="1">star</span>
+              <span class="star-interactive material-symbols-outlined fill-icon" data-v="2">star</span>
+              <span class="star-interactive material-symbols-outlined fill-icon" data-v="3">star</span>
+              <span class="star-interactive material-symbols-outlined fill-icon" data-v="4">star</span>
+              <span class="star-interactive material-symbols-outlined fill-icon" data-v="5">star</span>
+            </div>
+            <div>
+              <p class="font-headline-lg text-2xl text-secondary" id="current-rating-display">4.8</p>
+              <p class="font-label-mono text-xs text-on-surface-variant" id="rating-count-display">Loading...</p>
+            </div>
+          </div>
+          <p class="font-label-mono text-xs text-on-surface-variant mt-sm" id="your-rating-msg">Click stars to rate!</p>
+        </div>
+
+        <!-- Comments Lobby -->
+        <div class="bg-surface-container rounded-md p-lg border border-outline-variant hard-shadow">
+          <div class="flex items-center justify-between mb-lg">
+            <h3 class="font-headline-lg text-secondary" style="font-size:clamp(18px,3vw,28px)">The Lobby</h3>
+            <span class="font-label-mono text-on-surface-variant" id="comment-count-display">0 Players</span>
+          </div>
+          <!-- Comment Input -->
+          <div class="flex gap-md mb-lg">
+            <div class="w-10 h-10 rounded-full bg-primary-container flex-shrink-0 flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-sm">person</span>
+            </div>
+            <div class="flex-grow">
+              <textarea id="comment-input" class="w-full bg-background border-2 border-outline-variant rounded-md p-md focus:border-primary outline-none text-on-surface placeholder:text-on-surface-variant/50 font-body-md" placeholder="Drop a message in the lobby..." rows="2"></textarea>
+              <div class="flex justify-end mt-sm">
+                <button onclick="postComment()" class="px-lg py-sm bg-primary text-on-primary font-button-text rounded-full hard-shadow vibrate-hover">POST</button>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-lg" id="comments-list">
+            <p class="text-on-surface-variant font-label-mono text-sm text-center py-lg">Be the first to drop a message! 🎮</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Stats & Related -->
+      <div class="lg:col-span-4 space-y-lg">
+
+        <!-- Stats Card -->
+        <div class="bg-surface-container rounded-md p-md border border-outline-variant hard-shadow">
+          <h3 class="font-button-text text-button-text text-secondary mb-md uppercase tracking-widest">Global Stats</h3>
+          <div class="space-y-md">
+            <div>
+              <div class="flex justify-between mb-xs">
+                <span class="font-label-mono text-xs text-on-surface-variant">Hype Level</span>
+                <span class="font-label-mono text-xs text-tertiary" id="stat-hype-pct">72%</span>
+              </div>
+              <div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                <div class="h-full bg-tertiary rounded-full" id="stat-hype-bar" style="width:72%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-xs">
+                <span class="font-label-mono text-xs text-on-surface-variant">Community XP</span>
+                <span class="font-label-mono text-xs text-primary" id="stat-xp-level">LVL 18</span>
+              </div>
+              <div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                <div class="h-full xp-bar-purple w-3/5 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-md pt-md border-t border-outline-variant grid grid-cols-3 gap-sm">
+            <div class="text-center">
+              <p class="font-label-mono text-xs text-on-surface-variant uppercase">Plays</p>
+              <p class="font-headline-lg text-xl text-secondary font-black" id="stat-plays">—</p>
+            </div>
+            <div class="text-center">
+              <p class="font-label-mono text-xs text-on-surface-variant uppercase">Rating</p>
+              <p class="font-headline-lg text-xl text-primary font-black" id="stat-rating">—</p>
+            </div>
+            <div class="text-center">
+              <p class="font-label-mono text-xs text-on-surface-variant uppercase">Uploaded</p>
+              <p class="font-label-mono text-xs text-tertiary" id="stat-date">—</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Games -->
+        <div>
+          <h3 class="font-button-text text-button-text text-secondary mb-md flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary">grid_view</span> Related Loot
+          </h3>
+          <div class="space-y-sm" id="related-games-list"></div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAGE: UPLOAD                                     -->
+<!-- ═══════════════════════════════════════════════ -->
+<div data-page="upload">
+  <main class="min-h-screen pt-lg pb-xl px-gutter max-w-container-max mx-auto slide-in">
+    <section class="mb-lg text-center md:text-left">
+      <h1 class="font-display-xl text-primary-fixed-dim uppercase tracking-tight mb-xs" style="font-size:clamp(32px,7vw,64px)">The Game Vault</h1>
+      <p class="text-tertiary font-label-mono uppercase tracking-widest">Loot Section: Forge &amp; Upload</p>
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg items-start">
+
+      <!-- Upload Zone -->
+      <div class="lg:col-span-7 space-y-md">
+        <div class="bg-surface-container-high border-2 border-outline-variant p-lg rounded-lg pop-out-shadow relative group overflow-hidden">
+          <div class="absolute inset-0 scanline pointer-events-none opacity-30"></div>
+          <div id="drop-zone" class="relative z-10 flex flex-col items-center justify-center min-h-80 border-4 border-dashed border-primary border-opacity-30 rounded-lg bg-surface/50 hover:border-primary transition-all cursor-pointer p-lg" onclick="document.getElementById('file-input').click()">
+            <span class="material-symbols-outlined fill-icon text-primary mb-md" style="font-size:64px">cloud_upload</span>
+            <h2 class="font-headline-lg text-secondary mb-sm italic text-center" style="font-size:clamp(20px,3.5vw,36px)">Dropping some heat? 🔥</h2>
+            <p class="text-on-surface-variant font-body-md max-w-md mx-auto text-center">Drag &amp; Drop your <strong>.html</strong> or <strong>.zip</strong> file here. Our bots are ready to validate your masterpiece.</p>
+            <div class="mt-lg flex flex-wrap gap-md justify-center">
+              <div class="flex items-center gap-xs px-md py-sm bg-surface-container-highest rounded-full border border-outline">
+                <span class="material-symbols-outlined text-tertiary">folder_zip</span>
+                <span class="font-label-mono text-on-surface text-sm">.html / .zip</span>
+              </div>
+              <div class="flex items-center gap-xs px-md py-sm bg-surface-container-highest rounded-full border border-outline">
+                <span class="material-symbols-outlined text-primary">storage</span>
+                <span class="font-label-mono text-on-surface text-sm">Max 50MB</span>
+              </div>
+            </div>
+            <input type="file" id="file-input" class="hidden" accept=".html,.zip" onchange="handleFileSelect(this)"/>
+          </div>
+          <!-- File selected state (hidden by default) -->
+          <div id="file-selected" class="hidden relative z-10 flex items-center gap-md bg-surface-container rounded-lg p-md border-2 border-secondary mt-md hard-shadow">
+            <span class="material-symbols-outlined fill-icon text-secondary text-4xl">check_circle</span>
+            <div class="flex-grow">
+              <p class="font-button-text text-secondary" id="selected-file-name">game.html</p>
+              <p class="font-label-mono text-xs text-on-surface-variant" id="selected-file-size">0 KB</p>
+            </div>
+            <button onclick="clearFile()" class="text-on-surface-variant hover:text-error transition-colors">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Validation Result -->
+        <div id="validation-result" class="hidden bg-surface-container rounded-lg p-md border border-outline-variant hard-shadow">
+          <h4 class="font-button-text text-tertiary mb-sm flex items-center gap-sm">
+            <span class="material-symbols-outlined" id="val-icon">pending</span> Validation Report
+          </h4>
+          <div id="val-checks" class="space-y-xs"></div>
+        </div>
+
+        <div class="bg-surface-container rounded-lg p-md border border-outline-variant flex items-center gap-md">
+          <div class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-on-tertiary-container fill-icon">info</span>
+          </div>
+          <p class="text-on-surface-variant text-sm font-body-md"><span class="text-tertiary font-bold">Pro Tip:</span> Upload a self-contained HTML file with all assets inlined for best compatibility. Our validator checks for canvas, game loops, and interactivity!</p>
+        </div>
+      </div>
+
+      <!-- Metadata Form -->
+      <div class="lg:col-span-5 flex flex-col gap-md">
+        <div class="bg-surface-container-low border border-outline-variant rounded-lg p-lg pop-out-shadow">
+          <h3 class="font-headline-lg text-secondary mb-lg flex items-center gap-sm" style="font-size:clamp(20px,3vw,32px)">
+            <span class="material-symbols-outlined text-primary">edit_square</span> Loot Details
+          </h3>
+          <div class="space-y-lg">
+            <!-- Title -->
+            <div class="space-y-xs">
+              <label class="font-label-mono uppercase text-tertiary text-xs tracking-widest block">Game Identity *</label>
+              <input id="upload-title" class="w-full bg-surface-container-highest border-2 border-outline-variant text-on-surface px-md py-sm rounded-md focus:border-primary outline-none transition-all placeholder:text-outline-variant font-bold" placeholder="Legend of the Code..." type="text"/>
+            </div>
+            <!-- Description -->
+            <div class="space-y-xs">
+              <label class="font-label-mono uppercase text-tertiary text-xs tracking-widest block">The Lore (Description) *</label>
+              <textarea id="upload-desc" class="w-full bg-surface-container-highest border-2 border-outline-variant text-on-surface px-md py-sm rounded-md focus:border-primary outline-none transition-all placeholder:text-outline-variant" placeholder="Brief the community on your masterpiece..." rows="3"></textarea>
+            </div>
+            <!-- Author -->
+            <div class="space-y-xs">
+              <label class="font-label-mono uppercase text-tertiary text-xs tracking-widest block">Your Handle *</label>
+              <input id="upload-author" class="w-full bg-surface-container-highest border-2 border-outline-variant text-on-surface px-md py-sm rounded-md focus:border-primary outline-none transition-all placeholder:text-outline-variant" placeholder="@PixelPhantom" type="text"/>
+            </div>
+            <!-- Category -->
+            <div class="space-y-xs">
+              <label class="font-label-mono uppercase text-tertiary text-xs tracking-widest block">Genre Cluster</label>
+              <div class="grid grid-cols-3 gap-sm" id="genre-grid">
+                <button type="button" class="category-btn flex flex-col items-center gap-xs p-sm bg-surface-container-highest border-2 border-outline-variant rounded-md text-on-surface hover:border-tertiary transition-all text-sm" data-genre="Arcade">🕹️<span>Arcade</span></button>
+                <button type="button" class="category-btn flex flex-col items-center gap-xs p-sm bg-surface-container-highest border-2 border-outline-variant rounded-md text-on-surface hover:border-tertiary transition-all text-sm" data-genre="RPG">⚔️<span>RPG</span></button>
+                <button type="button" class="category-btn flex flex-col items-center gap-xs p-sm bg-surface-container-highest border-2 border-outline-variant rounded-md text-on-surface hover:border-tertiary transition-all text-sm" data-genre="Racing">🏎️<span>Racing</span></button>
+                <button type="button" class="category-btn flex flex-col items-center gap-xs p-sm bg-surface-container-highest border-2 border-outline-variant rounded-md text-on-surface hover:border-tertiary transition-all text-sm" data-genre="Puzzle">🧩<span>Puzzle</span></button>
+                <button type="button" class="category-btn flex flex-col items-center gap-xs p-sm bg-surface-container-highest border-2 border-outline-variant rounded-md text-on-surface hover:border-tertiary transition-all text-sm" data-genre="Action">💥<span>Action</span></button>
+                <button type="button" class="category-btn flex flex-col items-center gap-xs p-sm bg-surface-container-highest border-2 border-outline-variant rounded-md text-on-surface hover:border-tertiary transition-all text-sm" data-genre="Strategy">♟️<span>Strategy</span></button>
+              </div>
+            </div>
+
+            <!-- Progress indicator -->
+            <div class="space-y-sm">
+              <div class="flex justify-between items-center font-label-mono text-xs">
+                <span class="text-tertiary">FORGE INTEGRITY</span>
+                <span class="text-primary" id="integrity-pct">0% COMPLETE</span>
+              </div>
+              <div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden border border-outline">
+                <div class="h-full bg-primary-container diagonal-stripes rounded-full transition-all" id="integrity-bar" style="width:0%"></div>
+              </div>
+            </div>
+
+            <button onclick="submitUpload()" class="w-full bg-secondary-container text-on-secondary-container font-button-text text-button-text py-md rounded-full vibrate-hover glow-lime pop-out-shadow hover:translate-y-[-2px] transition-all flex items-center justify-center gap-sm">
+              INITIALIZE UPLOAD <span class="material-symbols-outlined">rocket_launch</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-primary-5 border-l-4 border-primary p-md rounded-r-md">
+          <p class="text-sm italic text-on-surface-variant">"By uploading to the Vault, you agree to grant our bots temporary sentience to optimize your code." 🤖</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAGE: LEADERBOARD                               -->
+<!-- ═══════════════════════════════════════════════ -->
+<div data-page="leaderboard">
+  <main class="max-w-container-max mx-auto px-gutter py-lg slide-in">
+    <div class="text-center mb-xl">
+      <h1 class="font-display-xl text-primary uppercase" style="font-size:clamp(36px,8vw,64px)">HALL OF FAME</h1>
+      <p class="text-tertiary font-label-mono uppercase tracking-widest">Where Legends Live &amp; Scrubs Fear to Enter</p>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="flex gap-sm overflow-x-auto pb-sm mb-lg">
+      <button class="filter-chip active px-md py-sm bg-surface-container border border-outline-variant rounded-full font-label-mono text-label-mono whitespace-nowrap" data-lb="rated" onclick="switchLeaderboard('rated',this)">⭐ Top Rated</button>
+      <button class="filter-chip px-md py-sm bg-surface-container border border-outline-variant rounded-full font-label-mono text-label-mono whitespace-nowrap" data-lb="played" onclick="switchLeaderboard('played',this)">🎮 Most Played</button>
+      <button class="filter-chip px-md py-sm bg-surface-container border border-outline-variant rounded-full font-label-mono text-label-mono whitespace-nowrap" data-lb="trending" onclick="switchLeaderboard('trending',this)">📈 Trending</button>
+      <button class="filter-chip px-md py-sm bg-surface-container border border-outline-variant rounded-full font-label-mono text-label-mono whitespace-nowrap" data-lb="new" onclick="switchLeaderboard('new',this)">🆕 New Games</button>
+    </div>
+
+    <!-- Top 3 Podium -->
+    <div class="grid grid-cols-3 gap-md mb-xl" id="podium-section">
+      <!-- Rendered by JS -->
+    </div>
+
+    <!-- Full Rankings Table -->
+    <div class="bg-surface-container rounded-lg border border-outline-variant hard-shadow overflow-hidden">
+      <div class="border-b border-outline-variant px-lg py-md flex items-center justify-between">
+        <h2 class="font-button-text text-button-text text-tertiary uppercase tracking-widest">Full Rankings</h2>
+        <span class="font-label-mono text-xs text-on-surface-variant" id="lb-subtitle">By Rating</span>
+      </div>
+      <div id="leaderboard-table" class="divide-y divide-outline-variant"></div>
+    </div>
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAGE: COMMUNITY / DISCOVER                      -->
+<!-- ═══════════════════════════════════════════════ -->
+<div data-page="community">
+  <main class="max-w-container-max mx-auto px-gutter py-lg slide-in">
+    <div class="mb-lg">
+      <h1 class="font-display-xl text-primary uppercase" style="font-size:clamp(28px,6vw,56px)">DISCOVER</h1>
+      <p class="text-tertiary font-label-mono uppercase tracking-widest">Browse the Vault by Genre</p>
+    </div>
+
+    <!-- Search + Filter Row -->
+    <div class="flex flex-wrap gap-md items-center mb-lg">
+      <div class="flex-grow min-w-0 relative">
+        <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+        <input id="community-search" type="text" placeholder="Search games, devs, tags..." class="w-full bg-surface-container border-2 border-outline-variant text-on-surface pl-xl pr-md py-sm rounded-full focus:border-primary outline-none transition-all font-body-md" oninput="filterCommunity()"/>
+      </div>
+      <div class="flex gap-sm flex-wrap">
+        <button class="filter-chip active px-md py-sm bg-surface-container border border-outline-variant rounded-full font-label-mono text-label-mono text-sm" data-filter="all" onclick="filterByGenre('all',this)">All 🎮</button>
+        <button class="filter-chip px-md py-sm bg-surface-container border border-outline-variant rounded-full font-label-mono text-label-mono text-sm" data-filter="Arcade" onclick="filterByGenre('Arcade',this)">🕹️ Arcade</button>
+        <button class="filter-chip px-md py-sm bg-surface-container border border-outline-variant rounded-full font-label-mono text-label-mono text-sm" data-filter="RPG" onclick="filterByGenre('RPG',this)">⚔️ RPG</button>
+        <button class="filter-chip px-md py-sm bg-surface-container border border-outline-variant rounded-full font-label-mono text-label-mono text-sm" data-filter="Racing" onclick="filterByGenre('Racing',this)">🏎️ Racing</button>
+        <button class="filter-chip px-md py-sm bg-surface-container border border-outline-variant rounded-full font-label-mono text-label-mono text-sm" data-filter="Puzzle" onclick="filterByGenre('Puzzle',this)">🧩 Puzzle</button>
+        <button class="filter-chip px-md py-sm bg-surface-container border border-outline-variant rounded-full font-label-mono text-label-mono text-sm" data-filter="Action" onclick="filterByGenre('Action',this)">💥 Action</button>
+        <button class="filter-chip px-md py-sm bg-surface-container border border-outline-variant rounded-full font-label-mono text-label-mono text-sm" data-filter="Strategy" onclick="filterByGenre('Strategy',this)">♟️ Strategy</button>
+      </div>
+    </div>
+
+    <!-- Games Grid -->
+    <div id="community-results" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-md"></div>
+    <p id="community-empty" class="hidden text-center py-xl text-on-surface-variant font-label-mono">
+      No games found 😢 Why not <button onclick="navigate('upload')" class="text-tertiary hover:underline">upload the first one?</button>
+    </p>
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAGE: PROFILE                                   -->
+<!-- ═══════════════════════════════════════════════ -->
+<div data-page="profile">
+  <main class="max-w-container-max mx-auto px-gutter py-lg slide-in">
+
+    <!-- Profile Header -->
+    <div class="bg-surface-container rounded-lg border border-outline-variant hard-shadow p-lg mb-lg relative overflow-hidden">
+      <div class="absolute inset-0 diagonal-stripes opacity-5 pointer-events-none"></div>
+      <div class="flex flex-col md:flex-row items-center md:items-start gap-lg relative z-10">
+        <div class="w-24 h-24 rounded-full border-4 border-secondary hard-shadow flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,var(--clr-primary-container),var(--clr-tertiary-container));cursor:pointer;" onclick="openEditProfile()" title="Edit Profile">
+          <span id="profile-avatar-big" style="font-size:44px;line-height:1;">🎮</span>
+        </div>
+        <div class="flex-grow text-center md:text-left">
+          <div class="flex items-center gap-sm justify-center md:justify-start mb-xs">
+            <h1 class="font-headline-lg text-secondary" style="font-size:clamp(24px,4vw,40px)" id="profile-display-name">@GamerAnuj</h1>
+            <button onclick="openEditProfile()" class="p-xs text-on-surface-variant hover:text-primary transition-colors" title="Edit Profile">
+              <span class="material-symbols-outlined" style="font-size:20px">edit</span>
+            </button>
+          </div>
+          <p class="text-on-surface-variant font-body-md" id="profile-display-bio">Indie game developer & arcade enjoyer 🕹️ | Joined June 2024</p>
+          <div class="flex flex-wrap gap-sm mt-sm justify-center md:justify-start">
+            <span class="px-sm py-xs bg-primary-20 text-primary rounded-full font-label-mono text-xs">LEVEL 24</span>
+            <span class="px-sm py-xs bg-secondary-container-30 text-secondary rounded-full font-label-mono text-xs">🏆 Top Uploader</span>
+            <span class="px-sm py-xs bg-tertiary-20 text-tertiary rounded-full font-label-mono text-xs">⚡ Clutch Player</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-md text-center">
+          <div class="bg-background-50 rounded-md p-sm">
+            <p class="font-label-mono text-xs text-on-surface-variant">Games</p>
+            <p class="font-headline-lg text-2xl text-secondary" id="profile-game-count">0</p>
+          </div>
+          <div class="bg-background-50 rounded-md p-sm">
+            <p class="font-label-mono text-xs text-on-surface-variant">Ratings</p>
+            <p class="font-headline-lg text-2xl text-primary">47</p>
+          </div>
+          <div class="bg-background-50 rounded-md p-sm">
+            <p class="font-label-mono text-xs text-on-surface-variant">XP</p>
+            <p class="font-headline-lg text-2xl text-tertiary">9.2k</p>
+          </div>
+        </div>
+      </div>
+      <!-- XP Bar -->
+      <div class="mt-lg relative z-10">
+        <div class="flex justify-between mb-xs font-label-mono text-xs">
+          <span class="text-primary">XP PROGRESS — LVL 24 → 25</span>
+          <span class="text-secondary">68%</span>
+        </div>
+        <div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
+          <div class="h-full xp-bar-purple rounded-full" style="width:68%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Tabs -->
+    <div class="flex gap-lg border-b border-outline-variant mb-lg">
+      <button class="profile-tab active pb-sm font-button-text text-button-text text-on-surface-variant transition-all" data-tab="uploaded" onclick="switchProfileTab('uploaded',this)">My Games</button>
+      <button class="profile-tab pb-sm font-button-text text-button-text text-on-surface-variant transition-all" data-tab="rated" onclick="switchProfileTab('rated',this)">Rated Games</button>
+      <button class="profile-tab pb-sm font-button-text text-button-text text-on-surface-variant transition-all" data-tab="achievements" onclick="switchProfileTab('achievements',this)">Achievements</button>
+    </div>
+
+    <!-- Tab: Uploaded Games -->
+    <div id="tab-uploaded" class="slide-in">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md" id="profile-uploaded-grid">
+        <!-- Rendered by JS -->
+      </div>
+      <div id="profile-empty" class="hidden text-center py-xl">
+        <span class="material-symbols-outlined fill-icon text-6xl text-outline mb-md block">sports_esports</span>
+        <p class="font-headline-lg text-on-surface-variant" style="font-size:20px">No games yet, rookie!</p>
+        <button onclick="navigate('upload')" class="mt-md bg-secondary-container text-on-secondary-container px-lg py-sm rounded-full font-button-text vibrate-hover pop-out-shadow glow-lime">Upload Your First Game 🚀</button>
+      </div>
+    </div>
+
+    <!-- Tab: Rated Games -->
+    <div id="tab-rated" class="hidden slide-in">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md" id="profile-rated-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Tab: Achievements -->
+    <div id="tab-achievements" class="hidden slide-in">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md" id="achievements-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="mt-xl border-t-4 border-surface-container-highest bg-surface-container-lowest text-tertiary">
+  <div class="w-full px-gutter py-lg flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto gap-md">
+    <div class="flex flex-col items-center md:items-start">
+      <span class="font-headline-lg text-primary mb-xs" style="font-size:clamp(20px,3vw,32px)">GameCloud</span>
+      <p class="font-body-md text-on-surface-variant">© 2025 GameCloud. Level Up Your Reality.</p>
+    </div>
+    <div class="flex flex-wrap justify-center gap-md">
+      <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors hover:underline decoration-secondary decoration-2">Privacy</a>
+      <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors hover:underline decoration-secondary decoration-2">Terms</a>
+      <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors hover:underline decoration-secondary decoration-2">Support</a>
+      <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors hover:underline decoration-secondary decoration-2">Discord</a>
+    </div>
+  </div>
+  <div class="w-full text-center py-md bg-black-40">
+    <span class="font-label-mono text-xs text-on-surface-variant uppercase tracking-[0.3em]">Built for the clutch • Powered by the community</span>
+  </div>
+</footer>
+
+<script>
+const GENRES = ['Arcade','RPG','Racing','Puzzle','Action','Strategy'];
+const COLORS = ['#ecb2ff','#edffe1','#00dbe9','#32ff00','#ffb4ab','#7df4ff'];
+const GENRE_EMOJI = {Arcade:'🕹️',RPG:'⚔️',Racing:'🏎️',Puzzle:'🧩',Action:'💥',Strategy:'♟️'};
+
+let games = JSON.parse(localStorage.getItem('gc_games') || 'null') || [
+  { id:'neon-overdrive', title:'Neon Overdrive', author:'@PixelPhantom', desc:'Master the grid in this high-speed tactical brawler. Loot rare cores, customize your rig, and dominate the digital underworld.', genre:'Arcade', tags:['cyberpunk','roguelike','arcade'], rating:4.9, ratingCount:1240, plays:12400, hype:8400, date:'2024-05-01', uploaded:false, htmlContent: null },
+  { id:'vapor-runner', title:'Vapor Runner', author:'@SynthWaveKid', desc:'An endless synthwave racing experience. Navigate neon highways at breakneck speed. Can you survive the grid?', genre:'Racing', tags:['synthwave','racing','endless'], rating:4.7, ratingCount:880, plays:9800, hype:6200, date:'2024-05-05', uploaded:false, htmlContent: null },
+  { id:'core-meltdown', title:'Core Meltdown', author:'@CodeWitch', desc:'A fiendish puzzle game where you manipulate reactor cores to prevent a catastrophic meltdown. 48 devilish levels.', genre:'Puzzle', tags:['puzzle','strategy','nuclear'], rating:4.6, ratingCount:760, plays:7200, hype:5100, date:'2024-05-10', uploaded:false, htmlContent: null },
+  { id:'bit-battalion', title:'Bit Battalion', author:'@RetroFuturist', desc:'Lead your pixel army through 8 brutal campaigns. Turn-based strategy with real-time battles. 8-bit aesthetics, modern depth.', genre:'Strategy', tags:['strategy','pixel-art','turn-based'], rating:4.5, ratingCount:630, plays:6100, hype:4300, date:'2024-05-14', uploaded:false, htmlContent: null },
+  { id:'data-heist', title:'Data Heist', author:'@GlitchMaster', desc:'You\'re a rogue AI. You have 60 seconds. Steal the data. Don\'t get caught. A frantic stealth-action game.', genre:'Action', tags:['stealth','action','cyberpunk'], rating:4.4, ratingCount:520, plays:5500, hype:3800, date:'2024-05-18', uploaded:false, htmlContent: null },
+  { id:'dungeon-forge', title:'Dungeon Forge', author:'@DungeonDev', desc:'Build your dungeon, trap heroes, amass gold. A reverse dungeon-master RPG with procedural hero waves.', genre:'RPG', tags:['rpg','dungeon','strategy'], rating:4.3, ratingCount:480, plays:4900, hype:3200, date:'2024-05-20', uploaded:false, htmlContent: null },
+  { id:'grid-surfer', title:'Grid Surfer', author:'@WaveRider99', desc:'Ride procedurally generated data waves in this hypnotic skill game. Perfect for speedrunners.', genre:'Arcade', tags:['arcade','speedrun','procedural'], rating:4.2, ratingCount:390, plays:4100, hype:2800, date:'2024-05-22', uploaded:false, htmlContent: null },
+  { id:'turbo-drift', title:'Turbo Drift X', author:'@NitroKing', desc:'The most ridiculous drifting simulator on the internet. Neon tracks, impossible physics, maximum fun.', genre:'Racing', tags:['racing','drift','physics'], rating:4.1, ratingCount:340, plays:3600, hype:2400, date:'2024-05-25', uploaded:false, htmlContent: null },
+];
+
+let userRatings = JSON.parse(localStorage.getItem('gc_ratings') || '{}');
+let comments = JSON.parse(localStorage.getItem('gc_comments') || '{}');
+let currentPage = 'home';
+let currentGameId = null;
+let currentLbMode = 'rated';
+let communityGenreFilter = 'all';
+
+function saveData() {
+  localStorage.setItem('gc_games', JSON.stringify(games));
+  localStorage.setItem('gc_ratings', JSON.stringify(userRatings));
+  localStorage.setItem('gc_comments', JSON.stringify(comments));
+}
+
+function navigate(page, gameId) {
+  document.querySelectorAll('[data-page]').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+  const pageEl = document.querySelector(`[data-page="${page}"]`);
+  if(pageEl) { pageEl.classList.add('active'); pageEl.querySelector('main') && (pageEl.querySelector('main').classList.remove('slide-in'), void pageEl.offsetWidth, pageEl.querySelector('main').classList.add('slide-in')); }
+  const navEl = document.querySelector(`[data-nav="${page}"]`);
+  if(navEl) navEl.classList.add('active');
+  // Update mobile nav
+  document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+  const mobileBtn = document.querySelector(`[data-mnav="${page}"]`);
+  if(mobileBtn) mobileBtn.classList.add('active');
+  currentPage = page;
+  window.scrollTo(0,0);
+  if(page === 'game' && gameId) loadGamePage(gameId);
+  if(page === 'leaderboard') renderLeaderboard('rated');
+  if(page === 'community') renderCommunity();
+  if(page === 'profile') renderProfile();
+  if(page === 'upload') initUploadPage();
+}
+
+function showToast(msg, icon='check_circle') {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  document.getElementById('toast-icon').textContent = icon;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function makeStars(rating) {
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5 ? 1 : 0;
+  let s = '';
+  for(let i=0;i<full;i++) s += '<span class="material-symbols-outlined fill-icon" style="color:#32ff00;font-size:14px">star</span>';
+  if(half) s += '<span class="material-symbols-outlined fill-icon" style="color:#32ff00;font-size:14px">star_half</span>';
+  return s;
+}
+
+function makeGameCard(g, size='normal') {
+  const colorIdx = GENRES.indexOf(g.genre) % COLORS.length;
+  const accent = COLORS[colorIdx] || '#ecb2ff';
+  return `
+  <div class="game-card bg-surface-container rounded-lg border border-outline-variant hard-shadow cursor-pointer overflow-hidden group" onclick="navigate('game','${g.id}')">
+    <div class="relative overflow-hidden" style="aspect-ratio:16/9; background: radial-gradient(ellipse at center, ${accent}22 0%, #131313 80%);">
+      <div class="absolute inset-0 scanline opacity-20"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span class="font-display-xl text-5xl font-black opacity-20 select-none" style="color:${accent}">${GENRE_EMOJI[g.genre]||'🎮'}</span>
+      </div>
+      <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black-50">
+        <div class="w-14 h-14 rounded-full flex items-center justify-center hard-shadow" style="background:${accent}">
+          <span class="material-symbols-outlined fill-icon text-background text-3xl">play_arrow</span>
+        </div>
+      </div>
+      <div class="absolute top-sm left-sm">
+        <span class="px-sm py-xs rounded-full font-label-mono text-xs" style="background:${accent}22; color:${accent}; border: 1px solid ${accent}66">${g.genre}</span>
+      </div>
+      ${g.uploaded ? '<div class="absolute top-sm right-sm"><span class="px-sm py-xs bg-secondary-container text-on-secondary-container rounded-full font-label-mono text-xs">YOUR GAME</span></div>' : ''}
+    </div>
+    <div class="p-md">
+      <h3 class="font-button-text text-on-surface group-hover:text-tertiary transition-colors truncate">${g.title}</h3>
+      <p class="font-label-mono text-xs text-on-surface-variant mb-sm truncate">${g.author}</p>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-xs">${makeStars(g.rating)} <span class="font-label-mono text-xs text-on-surface-variant ml-xs">${g.rating.toFixed(1)}</span></div>
+        <span class="font-label-mono text-xs text-on-surface-variant">${fmtNum(g.plays)} plays</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function makeListItem(g, rank) {
+  const colorIdx = GENRES.indexOf(g.genre) % COLORS.length;
+  const accent = COLORS[colorIdx] || '#ecb2ff';
+  return `
+  <div class="flex items-center gap-md p-md hover:bg-surface-container-high transition-colors cursor-pointer group" onclick="navigate('game','${g.id}')">
+    <span class="font-headline-lg text-3xl w-8 text-center flex-shrink-0" style="color:${accent}">${rank}</span>
+    <div class="w-12 h-12 rounded flex-shrink-0 flex items-center justify-center" style="background:${accent}22">
+      <span class="text-2xl">${GENRE_EMOJI[g.genre]||'🎮'}</span>
+    </div>
+    <div class="flex-grow min-w-0">
+      <h4 class="font-button-text text-on-surface group-hover:text-tertiary transition-colors truncate">${g.title}</h4>
+      <p class="font-label-mono text-xs text-on-surface-variant">${g.author} · ${g.genre}</p>
+    </div>
+    <div class="text-right flex-shrink-0">
+      <p class="font-label-mono text-xs" style="color:${accent}">${g.rating.toFixed(1)} ⭐</p>
+      <p class="font-label-mono text-xs text-on-surface-variant">${fmtNum(g.plays)} plays</p>
+    </div>
+  </div>`;
+}
+
+function fmtNum(n) {
+  if(n >= 1000000) return (n/1000000).toFixed(1)+'M';
+  if(n >= 1000) return (n/1000).toFixed(1)+'k';
+  return n.toString();
+}
+
+function renderHome() {
+  const sorted = [...games].sort((a,b) => b.rating - a.rating);
+  const hot = sorted.slice(0,4);
+  document.getElementById('hot-games-grid').innerHTML = hot.map(g => makeGameCard(g)).join('');
+
+  const newGames = [...games].sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,4);
+  document.getElementById('new-games-list').innerHTML = newGames.map((g,i) => {
+    const accent = COLORS[GENRES.indexOf(g.genre)%COLORS.length] || '#ecb2ff';
+    return `<div class="flex items-center gap-md p-sm rounded-lg border border-outline-variant bg-surface-container cursor-pointer hover:bg-surface-container-high transition-all group" onclick="navigate('game','${g.id}')">
+      <span class="font-label-mono text-xs w-6 text-center" style="color:${accent}">${i+1}</span>
+      <div class="w-10 h-10 rounded flex items-center justify-center flex-shrink-0" style="background:${accent}22"><span class="text-xl">${GENRE_EMOJI[g.genre]||'🎮'}</span></div>
+      <div class="flex-grow min-w-0">
+        <h4 class="font-button-text text-sm text-on-surface group-hover:text-tertiary transition-colors truncate">${g.title}</h4>
+        <p class="font-label-mono text-xs text-on-surface-variant">${g.author}</p>
+      </div>
+      <span class="px-sm py-xs rounded-full font-label-mono text-xs" style="background:${accent}22;color:${accent}">NEW</span>
+    </div>`;
+  }).join('');
+
+  const lb = sorted.slice(0,5);
+  document.getElementById('sidebar-leaderboard').innerHTML = lb.map((g,i) => {
+    const accent = i===0?'#32ff00':i===1?'#ecb2ff':'#00dbe9';
+    return `<div class="flex items-center gap-sm cursor-pointer hover:bg-surface-container-high px-sm py-xs rounded transition-colors" onclick="navigate('game','${g.id}')">
+      <span class="font-label-mono text-sm font-bold w-5 text-center" style="color:${accent}">${i+1}</span>
+      <div class="flex-grow min-w-0">
+        <p class="font-button-text text-sm text-on-surface truncate">${g.title}</p>
+        <p class="font-label-mono text-xs text-on-surface-variant">${g.author}</p>
+      </div>
+      <span class="font-label-mono text-xs" style="color:${accent}">★${g.rating.toFixed(1)}</span>
+    </div>`;
+  }).join('');
+
+  const trending = [...games].sort((a,b) => b.plays - a.plays).slice(0,4);
+  document.getElementById('trending-grid').innerHTML = trending.map(g => makeGameCard(g,'small')).join('');
+}
+
+function loadGamePage(id) {
+  const g = games.find(x => x.id === id);
+  if(!g) { navigate('home'); return; }
+
+  // ── STEP 1: Kill any running game iframe FIRST ──────────────────
+  if(_activeBlobUrl) { try { URL.revokeObjectURL(_activeBlobUrl); } catch(e){} _activeBlobUrl = null; }
+  const area = document.getElementById('game-play-area');
+  if(area) {
+    area.querySelectorAll('iframe').forEach(f => { try { f.src = 'about:blank'; } catch(e){} f.remove(); });
+    // Rebuild the play area placeholder with correct game title
+    // Note: game-title-display and game-version-display live INSIDE the play area,
+    // so we must rebuild it here (not wipe + set separately).
+    area.innerHTML = `
+      <div class="text-center" id="play-placeholder">
+        <div style="width:96px;height:96px;background:var(--clr-secondary-container);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:4px 4px 0 0 rgba(0,0,0,1);cursor:pointer;margin:0 auto var(--sp-md);" onclick="startGame()">
+          <span class="material-symbols-outlined fill-icon" style="font-size:36px;color:var(--clr-on-secondary-container);">play_arrow</span>
+        </div>
+        <h1 id="game-title-display" class="font-headline-lg text-primary drop-shadow-lg mb-sm" style="font-size:clamp(20px,4vw,36px);">${escapeHtml(g.title.toUpperCase())}</h1>
+        <p id="game-version-display" class="font-label-mono text-label-mono text-secondary">v1.0 · ${escapeHtml(g.genre)} · by ${escapeHtml(g.author)}</p>
+        <p class="font-label-mono text-xs mt-sm" style="color:var(--clr-outline);">Click the button above to start playing</p>
+      </div>`;
+  }
+
+  // ── STEP 2: Update all metadata fields AFTER play area is rebuilt ─
+  currentGameId = id;
+  g.plays = (g.plays || 0) + 1;
+  saveData();
+
+  function setEl(elId, value, prop='textContent') {
+    const el = document.getElementById(elId);
+    if(el) el[prop] = value;
+  }
+
+  setEl('game-breadcrumb', g.title);
+  setEl('game-full-title', g.title);
+  setEl('game-author', g.author);
+  setEl('game-description', g.desc);
+  setEl('game-hype', fmtNum(g.hype || 0));
+  setEl('stat-plays', fmtNum(g.plays));
+  setEl('stat-rating', g.rating.toFixed(1));
+  setEl('stat-date', g.date.slice(0,7));
+  setEl('stat-hype-pct', Math.min(99, Math.round((g.hype||0)/100))+'%');
+  const hypeBar = document.getElementById('stat-hype-bar');
+  if(hypeBar) hypeBar.style.width = Math.min(99, Math.round((g.hype||0)/100))+'%';
+
+  const tags = document.getElementById('game-tags');
+  if(tags) tags.innerHTML = (g.tags||[]).map(t =>
+    `<span style="padding:2px 10px;background:var(--clr-surface-container-highest);border:1px solid var(--clr-outline-variant);color:var(--clr-tertiary);font-family:'JetBrains Mono',monospace;font-size:12px;border-radius:6px;">#${escapeHtml(t.toUpperCase())}</span>`
+  ).join('');
+
+  updateRatingDisplay(g);
+  const ur = userRatings[id];
+  setEl('your-rating-msg', ur ? `You rated this ${ur} star${ur>1?'s':''}! ⭐` : 'Click stars to rate!');
+  highlightStars(ur || 0);
+
+  renderComments(id);
+  renderRelatedGames(g);
+  setTimeout(updateHypeBtn, 50);
+}
+
+// Track active blob URL so we can revoke it when navigating away
+let _activeBlobUrl = null;
+
+function startGame() {
+  const g = games.find(x => x.id === currentGameId);
+  if(!g) return;
+  const area = document.getElementById('game-play-area');
+  if(!area) return;
+
+  // Revoke stale blob URL if any
+  if(_activeBlobUrl) { try { URL.revokeObjectURL(_activeBlobUrl); } catch(e){} _activeBlobUrl = null; }
+
+  // Remove placeholder
+  area.innerHTML = '';
+
+  // Build iframe — always use srcdoc so it works on file://, http://, https:// equally
+  const iframe = document.createElement('iframe');
+  const htmlContent = (g.htmlContent && g.uploaded) ? g.htmlContent : makeDemoGame(g);
+  // srcdoc is safest across all origins; encode &/"/< for attribute safety
+  iframe.setAttribute('srcdoc', htmlContent);
+  iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-pointer-lock');
+  iframe.style.cssText = 'width:100%;height:100%;border:none;border-radius:var(--radius);display:block;';
+  iframe.setAttribute('allowfullscreen', '');
+  area.appendChild(iframe);
+
+  if(g.htmlContent && g.uploaded) {
+    showToast(`${g.title} launched! 🚀`, 'rocket_launch');
+  } else {
+    showToast('Demo mode — upload your own HTML game file for the real thing! 🎮', 'sports_esports');
+  }
+}
+
+function makeDemoGame(g) {
+  const accent = COLORS[GENRES.indexOf(g.genre)%COLORS.length] || '#ecb2ff';
+  const title = g.title.replace(/'/g, "\\'").replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // Build the HTML string then encode for srcdoc - keep it self-contained, no external refs
+  const html = [
+    '<!DOCTYPE html><html><head><meta charset="utf-8">',
+    '<style>',
+    '*{margin:0;padding:0;box-sizing:border-box}',
+    'body{background:#131313;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:monospace;overflow:hidden}',
+    'canvas{border:2px solid ' + accent + ';border-radius:8px}',
+    'h1{color:' + accent + ';font-size:18px;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.1em}',
+    'p{color:#9d8ba0;font-size:12px;margin-top:8px}',
+    '</style></head><body>',
+    '<h1>' + title + '</h1>',
+    '<canvas id="c" width="480" height="270"></canvas>',
+    '<p>Demo Mode · Upload your real HTML game file to replace this!</p>',
+    '<script>',
+    'var c=document.getElementById("c"),ctx=c.getContext("2d");',
+    'var score=0,px=240,balls=[],keys={};',
+    'document.addEventListener("keydown",function(e){keys[e.key]=true});',
+    'document.addEventListener("keyup",function(e){keys[e.key]=false});',
+    'c.addEventListener("touchstart",function(e){var t=e.touches[0];keys[t.clientX<window.innerWidth/2?"ArrowLeft":"ArrowRight"]=true});',
+    'c.addEventListener("touchend",function(){keys["ArrowLeft"]=false;keys["ArrowRight"]=false});',
+    'function loop(){',
+    '  ctx.fillStyle="#0e0e0e";ctx.fillRect(0,0,480,270);',
+    '  if(keys["ArrowLeft"]||keys["a"])px=Math.max(20,px-4);',
+    '  if(keys["ArrowRight"]||keys["d"])px=Math.min(460,px+4);',
+    '  ctx.fillStyle="' + accent + '";ctx.fillRect(px-35,252,70,10);',
+    '  if(Math.random()<0.025)balls.push({x:Math.random()*460+10,y:0,vy:1.5+score/25,r:5+Math.random()*4});',
+    '  balls=balls.filter(function(b){',
+    '    b.y+=b.vy;',
+    '    ctx.fillStyle="#ecb2ff";ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,6.28);ctx.fill();',
+    '    if(Math.abs(b.x-px)<40&&b.y>245&&b.y<268){score++;return false;}',
+    '    return b.y<280;',
+    '  });',
+    '  ctx.fillStyle="' + accent + '";ctx.font="bold 14px monospace";',
+    '  ctx.fillText("SCORE: "+score,10,22);',
+    '  ctx.fillStyle="#514255";ctx.font="11px monospace";',
+    '  ctx.fillText("← → or A/D to move  |  tap left/right on mobile",90,262);',
+    '  requestAnimationFrame(loop);',
+    '}',
+    'loop();',
+    '<\/script>',
+    '</body></html>'
+  ].join('');
+  return html.replace(/"/g, '&quot;');
+}
+
+function toggleFullscreen() {
+  const area = document.getElementById('game-play-area');
+  const iframe = area ? area.querySelector('iframe') : null;
+  const target = iframe || area;
+  if(!target) return;
+  if(target.requestFullscreen) target.requestFullscreen();
+  else if(target.webkitRequestFullscreen) target.webkitRequestFullscreen();
+  else if(target.mozRequestFullScreen) target.mozRequestFullScreen();
+}
+
+function hypeGame(btn) {
+  const g = games.find(x => x.id === currentGameId);
+  if(!g) return;
+  // One hype per game per user — stored in localStorage
+  let hyped = JSON.parse(localStorage.getItem('gc_hyped') || '{}');
+  if(hyped[currentGameId]) {
+    showToast('Already hyped this one! 🔥 (One hype per game)', 'info');
+    return;
+  }
+  hyped[currentGameId] = true;
+  localStorage.setItem('gc_hyped', JSON.stringify(hyped));
+  g.hype = (g.hype||0) + 1;
+  document.getElementById('game-hype').textContent = fmtNum(g.hype);
+  // Visually mark button as hyped
+  const hypeBtn = document.getElementById('hype-btn');
+  if(hypeBtn) {
+    hypeBtn.style.background = 'var(--clr-secondary-container)';
+    hypeBtn.style.color = 'var(--clr-on-secondary-container)';
+    hypeBtn.style.borderColor = 'var(--clr-secondary-container)';
+    hypeBtn.querySelector('.hype-label') && (hypeBtn.querySelector('.hype-label').textContent = 'HYPED!');
+  }
+  showToast('Hype added! 🔥', 'local_fire_department');
+  saveData();
+}
+
+function updateHypeBtn() {
+  const hyped = JSON.parse(localStorage.getItem('gc_hyped') || '{}');
+  const btn = document.getElementById('hype-btn');
+  if(!btn) return;
+  if(hyped[currentGameId]) {
+    btn.style.background = 'var(--clr-secondary-container)';
+    btn.style.color = 'var(--clr-on-secondary-container)';
+    btn.style.borderColor = 'var(--clr-secondary-container)';
+    const lbl = btn.querySelector('.hype-label');
+    if(lbl) lbl.textContent = 'HYPED! ✓';
+  } else {
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+    const lbl = btn.querySelector('.hype-label');
+    if(lbl) lbl.textContent = 'HYPE';
+  }
+}
+
+function updateRatingDisplay(g) {
+  document.getElementById('current-rating-display').textContent = g.rating.toFixed(1);
+  document.getElementById('rating-count-display').textContent = `${fmtNum(g.ratingCount)} ratings`;
+  document.getElementById('stat-rating').textContent = g.rating.toFixed(1);
+}
+
+function highlightStars(val) {
+  document.querySelectorAll('#star-rater .star-interactive').forEach(s => {
+    s.classList.toggle('lit', parseInt(s.dataset.v) <= val);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const rater = document.getElementById('star-rater');
+  if(rater) {
+    rater.addEventListener('mouseover', e => {
+      if(e.target.dataset.v) highlightStars(parseInt(e.target.dataset.v));
+    });
+    rater.addEventListener('mouseleave', () => {
+      const ur = userRatings[currentGameId];
+      highlightStars(ur || 0);
+    });
+    rater.addEventListener('click', e => {
+      if(!e.target.dataset.v) return;
+      const val = parseInt(e.target.dataset.v);
+      rateGame(val);
+    });
+  }
+});
+
+function rateGame(val) {
+  const g = games.find(x => x.id === currentGameId);
+  if(!g) return;
+  const oldRating = userRatings[currentGameId];
+  if(oldRating) {
+    // Update existing rating
+    const total = g.rating * g.ratingCount - oldRating + val;
+    g.rating = Math.round((total / g.ratingCount) * 10) / 10;
+  } else {
+    const total = g.rating * g.ratingCount + val;
+    g.ratingCount++;
+    g.rating = Math.round((total / g.ratingCount) * 10) / 10;
+  }
+  userRatings[currentGameId] = val;
+  highlightStars(val);
+  document.getElementById('your-rating-msg').textContent = `You rated this ${val} star${val>1?'s':''}! ⭐`;
+  updateRatingDisplay(g);
+  saveData();
+  showToast(`Rated ${val} stars! Thanks for the feedback 🎮`, 'star');
+}
+
+function renderComments(gameId) {
+  const list = comments[gameId] || [];
+  const el = document.getElementById('comments-list');
+  document.getElementById('comment-count-display').textContent = `${list.length} Player${list.length!==1?'s':''}`;
+  if(list.length === 0) {
+    el.innerHTML = '<p class="text-on-surface-variant font-label-mono text-sm text-center py-lg">Be the first to drop a message! 🎮</p>';
+    return;
+  }
+  el.innerHTML = list.map(c => `
+    <div class="flex gap-md">
+      <div class="w-10 h-10 rounded-full bg-surface-container-highest border-2 flex-shrink-0 flex items-center justify-center" style="border-color:${c.color||'#ecb2ff'}">
+        <span class="font-bold text-sm" style="color:${c.color||'#ecb2ff'}">${c.name[0]}</span>
+      </div>
+      <div class="space-y-xs">
+        <div class="flex items-center gap-md">
+          <span class="font-button-text text-sm" style="color:${c.color||'#ecb2ff'}">${c.name}</span>
+          <span class="font-label-mono text-xs text-on-surface-variant">${c.time}</span>
+        </div>
+        <p class="text-on-surface font-body-md text-sm">${escapeHtml(c.text)}</p>
+      </div>
+    </div>`).join('');
+}
+
+function postComment() {
+  const input = document.getElementById('comment-input');
+  const text = input.value.trim();
+  if(!text) { showToast('Type something first! 😤', 'error'); return; }
+  if(!comments[currentGameId]) comments[currentGameId] = [];
+  const colors = ['#ecb2ff','#32ff00','#00dbe9','#edffe1','#7df4ff'];
+  comments[currentGameId].unshift({
+    name: window._commentAuthorName || getProfile().name || 'GamerAnuj',
+    text,
+    time: 'Just now',
+    color: colors[Math.floor(Math.random()*colors.length)]
+  });
+  input.value = '';
+  renderComments(currentGameId);
+  saveData();
+  showToast('Dropped in the lobby! 🎤', 'chat');
+}
+
+function renderRelatedGames(g) {
+  const related = games.filter(x => x.id !== g.id && (x.genre === g.genre || x.tags?.some(t => g.tags?.includes(t)))).slice(0,4);
+  const el = document.getElementById('related-games-list');
+  if(related.length === 0) { el.innerHTML = '<p class="text-on-surface-variant font-label-mono text-xs text-center">No related games yet</p>'; return; }
+  el.innerHTML = related.map(r => {
+    const accent = COLORS[GENRES.indexOf(r.genre)%COLORS.length] || '#ecb2ff';
+    return `<div class="group flex gap-md bg-surface-container-low p-sm rounded-md border border-outline-variant hard-shadow-hover transition-all cursor-pointer" onclick="navigate('game','${r.id}')">
+      <div class="w-16 h-16 rounded flex-shrink-0 flex items-center justify-center" style="background:${accent}22"><span class="text-2xl">${GENRE_EMOJI[r.genre]||'🎮'}</span></div>
+      <div class="flex flex-col justify-center min-w-0">
+        <h4 class="font-button-text text-sm text-on-surface group-hover:text-tertiary transition-colors truncate">${r.title}</h4>
+        <p class="font-label-mono text-xs text-on-surface-variant">${r.genre}</p>
+        <div class="flex items-center gap-xs mt-xs text-primary">${makeStars(r.rating)}<span class="font-label-mono text-xs ml-xs">${r.rating.toFixed(1)}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let uploadedFile = null;
+let selectedGenre = '';
+let uploadIntegrity = 0;
+
+function initUploadPage() {
+  uploadedFile = null; selectedGenre = ''; uploadIntegrity = 0;
+  document.getElementById('drop-zone').classList.remove('upload-drop-active');
+  document.getElementById('file-selected').classList.add('hidden');
+  document.getElementById('validation-result').classList.add('hidden');
+  document.getElementById('upload-title').value = '';
+  document.getElementById('upload-desc').value = '';
+  document.getElementById('upload-author').value = '';
+  document.getElementById('integrity-bar').style.width = '0%';
+  document.getElementById('integrity-pct').textContent = '0% COMPLETE';
+  document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
+
+  // Drag and drop
+  const dz = document.getElementById('drop-zone');
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('upload-drop-active'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('upload-drop-active'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault(); dz.classList.remove('upload-drop-active');
+    const file = e.dataTransfer.files[0];
+    if(file) processUploadFile(file);
+  });
+
+  // Category buttons
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.onclick = function() {
+      document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedGenre = this.dataset.genre;
+      calcIntegrity();
+    };
+  });
+
+  // Live integrity
+  ['upload-title','upload-desc','upload-author'].forEach(id => {
+    document.getElementById(id).addEventListener('input', calcIntegrity);
+  });
+}
+
+function handleFileSelect(input) {
+  if(input.files[0]) processUploadFile(input.files[0]);
+}
+
+function processUploadFile(file) {
+  uploadedFile = file;
+  document.getElementById('selected-file-name').textContent = file.name;
+  document.getElementById('selected-file-size').textContent = (file.size/1024).toFixed(1)+' KB';
+  document.getElementById('file-selected').classList.remove('hidden');
+  document.getElementById('drop-zone').querySelector('.flex').style.minHeight = '80px';
+
+  if(file.name.endsWith('.html')) {
+    const reader = new FileReader();
+    reader.onload = e => validateGame(e.target.result, file.name);
+    reader.readAsText(file);
+  } else {
+    showValidation([
+      {pass:true, msg:'File received'},
+      {pass:true, msg:'.zip format accepted'},
+      {pass:false, msg:'Full validation runs on HTML files only'},
+    ]);
+  }
+  calcIntegrity();
+}
+
+function validateGame(html, fname) {
+  const checks = [];
+  checks.push({pass:true, msg:`File received: ${fname}`});
+  checks.push({pass:html.includes('<!DOCTYPE html')||html.includes('<html'), msg:'Valid HTML document structure'});
+  checks.push({pass:html.includes('<canvas')||html.includes('<script'), msg:'Game logic detected (canvas/scripts found)'});
+  const hasInput = html.includes('keydown')||html.includes('onclick')||html.includes('addEventListener');
+  checks.push({pass:hasInput, msg:'User interactivity detected'});
+  const hasLoop = html.includes('requestAnimationFrame')||html.includes('setInterval')||html.includes('setTimeout');
+  checks.push({pass:hasLoop, msg:'Game loop / animation detected'});
+  checks.push({pass:html.length > 500, msg:'Content length looks substantial'});
+  showValidation(checks);
+}
+
+function showValidation(checks) {
+  const all = checks.every(c=>c.pass);
+  document.getElementById('val-icon').textContent = all ? 'verified' : 'warning';
+  document.getElementById('val-icon').style.color = all ? '#32ff00' : '#ffb4ab';
+  document.getElementById('val-checks').innerHTML = checks.map(c => `
+    <div class="flex items-center gap-sm font-label-mono text-xs py-xs">
+      <span class="material-symbols-outlined fill-icon text-base" style="color:${c.pass?'#32ff00':'#ffb4ab'}">${c.pass?'check_circle':'cancel'}</span>
+      <span style="color:${c.pass?'#edffe1':'#d4c0d7'}">${c.msg}</span>
+    </div>`).join('');
+  document.getElementById('validation-result').classList.remove('hidden');
+  calcIntegrity();
+}
+
+function clearFile() {
+  uploadedFile = null;
+  document.getElementById('file-selected').classList.add('hidden');
+  document.getElementById('validation-result').classList.add('hidden');
+  document.getElementById('file-input').value = '';
+  calcIntegrity();
+}
+
+function calcIntegrity() {
+  let score = 0;
+  if(uploadedFile) score += 30;
+  if(document.getElementById('upload-title').value.trim().length > 2) score += 25;
+  if(document.getElementById('upload-desc').value.trim().length > 10) score += 20;
+  if(document.getElementById('upload-author').value.trim().length > 1) score += 15;
+  if(selectedGenre) score += 10;
+  uploadIntegrity = Math.min(100, score);
+  document.getElementById('integrity-bar').style.width = uploadIntegrity+'%';
+  document.getElementById('integrity-pct').textContent = uploadIntegrity+'% COMPLETE';
+}
+
+function submitUpload() {
+  const title = document.getElementById('upload-title').value.trim();
+  const desc = document.getElementById('upload-desc').value.trim();
+  const author = document.getElementById('upload-author').value.trim();
+  if(!title || !desc || !author) { showToast('Fill in the required fields first! 📋', 'error'); return; }
+  if(!uploadedFile) { showToast('Upload a game file first! 📁', 'upload'); return; }
+
+  const newGame = {
+    id: 'user-' + Date.now(),
+    title, desc, author: author.startsWith('@') ? author : '@'+author,
+    genre: selectedGenre || 'Arcade',
+    tags: [selectedGenre?.toLowerCase() || 'arcade', 'community'],
+    rating: 0, ratingCount: 0, plays: 0, hype: 0,
+    date: new Date().toISOString().slice(0,10),
+    uploaded: true,
+    htmlContent: null
+  };
+
+  if(uploadedFile.name.endsWith('.html')) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      newGame.htmlContent = e.target.result;
+      finalizeUpload(newGame);
+    };
+    reader.readAsText(uploadedFile);
+  } else {
+    finalizeUpload(newGame);
+  }
+}
+
+function finalizeUpload(game) {
+  games.unshift(game);
+  saveData();
+  showToast('Game uploaded to the Vault! 🚀', 'rocket_launch');
+  setTimeout(() => navigate('game', game.id), 600);
+}
+
+function renderLeaderboard(mode) {
+  currentLbMode = mode;
+  let sorted;
+  let subtitle;
+  if(mode==='rated') { sorted=[...games].sort((a,b)=>b.rating-a.rating||b.ratingCount-a.ratingCount); subtitle='By Rating'; }
+  else if(mode==='played') { sorted=[...games].sort((a,b)=>b.plays-a.plays); subtitle='By Plays'; }
+  else if(mode==='trending') { sorted=[...games].sort((a,b)=>b.hype-a.hype); subtitle='By Hype'; }
+  else { sorted=[...games].sort((a,b)=>new Date(b.date)-new Date(a.date)); subtitle='Newest First'; }
+  document.getElementById('lb-subtitle').textContent = subtitle;
+
+  const podium = sorted.slice(0,3);
+  const podiumEl = document.getElementById('podium-section');
+  const podiumOrder = [1,0,2];
+  podiumEl.innerHTML = podiumOrder.map(i => {
+    const g = podium[i];
+    if(!g) return '<div></div>';
+    const rankColors = ['#32ff00','#ecb2ff','#00dbe9'];
+    const rankLabels = ['🥇 1st','🥈 2nd','🥉 3rd'];
+    const heights = ['lg:mt-0','lg:mt-8','lg:mt-12'];
+    const rankClass = ['rank-1','rank-2','rank-3'];
+    return `<div class="flex flex-col items-center ${heights[i]}">
+      <div class="${rankClass[i]} border-2 rounded-lg p-md hard-shadow cursor-pointer hover:opacity-90 transition-all w-full text-center" onclick="navigate('game','${g.id}')">
+        <div class="text-3xl mb-sm">${GENRE_EMOJI[g.genre]||'🎮'}</div>
+        <p class="font-button-text text-on-surface text-sm truncate">${g.title}</p>
+        <p class="font-label-mono text-xs text-on-surface-variant truncate">${g.author}</p>
+        <p class="font-headline-lg text-lg mt-sm font-black" style="color:${rankColors[i]}">${mode==='played'?fmtNum(g.plays)+' plays':mode==='trending'?fmtNum(g.hype)+' hype':g.rating.toFixed(1)+' ⭐'}</p>
+      </div>
+      <div class="mt-sm font-label-mono text-xs tracking-widest" style="color:${rankColors[i]}">${rankLabels[i]}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('leaderboard-table').innerHTML = sorted.map((g,i) => makeListItem(g, i+1)).join('');
+}
+
+function switchLeaderboard(mode, btn) {
+  document.querySelectorAll('[data-lb]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLeaderboard(mode);
+}
+
+function renderCommunity() {
+  communityGenreFilter = 'all';
+  document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-filter="all"]').classList.add('active');
+  filterCommunity();
+}
+
+function filterByGenre(genre, btn) {
+  communityGenreFilter = genre;
+  document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCommunity();
+}
+
+function filterCommunity() {
+  const q = document.getElementById('community-search').value.toLowerCase();
+  let filtered = games;
+  if(communityGenreFilter !== 'all') filtered = filtered.filter(g => g.genre === communityGenreFilter);
+  if(q) filtered = filtered.filter(g => g.title.toLowerCase().includes(q) || g.author.toLowerCase().includes(q) || (g.tags||[]).some(t=>t.includes(q)));
+  const grid = document.getElementById('community-results');
+  const empty = document.getElementById('community-empty');
+  if(filtered.length === 0) { grid.innerHTML = ''; empty.classList.remove('hidden'); }
+  else { empty.classList.add('hidden'); grid.innerHTML = filtered.map(g => makeGameCard(g)).join(''); }
+}
+
+function renderProfile() {
+  // Apply saved profile data
+  applyProfileToPage(getProfile());
+  const myGames = games.filter(g => g.uploaded);
+  document.getElementById('profile-game-count').textContent = myGames.length;
+  const grid = document.getElementById('profile-uploaded-grid');
+  const empty = document.getElementById('profile-empty');
+  if(myGames.length === 0) { grid.innerHTML=''; empty.classList.remove('hidden'); }
+  else { empty.classList.add('hidden'); grid.innerHTML = myGames.map(g=>makeGameCard(g)).join(''); }
+
+  // Rated games
+  const ratedIds = Object.keys(userRatings);
+  const ratedGames = games.filter(g => ratedIds.includes(g.id));
+  document.getElementById('profile-rated-grid').innerHTML = ratedGames.length > 0
+    ? ratedGames.map(g=>`<div>${makeGameCard(g)}<p class="text-center font-label-mono text-xs mt-xs" style="color:#32ff00">You rated: ${userRatings[g.id]}⭐</p></div>`).join('')
+    : '<p class="col-span-3 text-center py-xl text-on-surface-variant font-label-mono">No rated games yet. Go play something! 🎮</p>';
+
+  renderAchievements(myGames, ratedGames);
+}
+
+function renderAchievements(myGames, ratedGames) {
+  const achieves = [
+    {icon:'upload',label:'First Drop',desc:'Upload your first game',color:'#32ff00',unlocked:myGames.length>=1},
+    {icon:'star',label:'Critic',desc:'Rate 3+ games',color:'#ecb2ff',unlocked:ratedGames.length>=3},
+    {icon:'sports_esports',label:'Player',desc:'Play any game',color:'#00dbe9',unlocked:Object.keys(userRatings).length>0},
+    {icon:'chat',label:'Lobby Regular',desc:'Post a comment',color:'#32ff00',unlocked:Object.values(comments).some(c=>c.some(x=>x.name===(window._commentAuthorName||getProfile().name||'GamerAnuj')))},
+    {icon:'workspace_premium',label:'Vault Master',desc:'Upload 5 games',color:'#ecb2ff',unlocked:myGames.length>=5},
+    {icon:'emoji_events',label:'Legend',desc:'Get a top-rated game',color:'#ffb300',unlocked:myGames.some(g=>g.rating>=4.5)},
+  ];
+  document.getElementById('achievements-grid').innerHTML = achieves.map(a => `
+    <div class="bg-surface-container rounded-lg border border-outline-variant p-md hard-shadow text-center ${a.unlocked?'':'opacity-40'}">
+      <div class="w-14 h-14 rounded-full mx-auto mb-sm flex items-center justify-center" style="background:${a.color}22; border:2px solid ${a.color}">
+        <span class="material-symbols-outlined fill-icon text-2xl" style="color:${a.color}">${a.icon}</span>
+      </div>
+      <p class="font-button-text text-sm text-on-surface">${a.label}</p>
+      <p class="font-label-mono text-xs text-on-surface-variant mt-xs">${a.desc}</p>
+      ${a.unlocked?`<span class="mt-sm inline-block px-sm py-xs rounded-full font-label-mono text-xs" style="background:${a.color}22;color:${a.color}">UNLOCKED ✓</span>`:'<span class="mt-sm inline-block px-sm py-xs rounded-full font-label-mono text-xs bg-surface-container-highest text-on-surface-variant">LOCKED 🔒</span>'}
+    </div>`).join('');
+}
+
+function switchProfileTab(tab, btn) {
+  ['uploaded','rated','achievements'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('hidden', t !== tab);
+  });
+  document.querySelectorAll('.profile-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderHome();
+  // Micro-interactions
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if(btn && !btn.classList.contains('vibrate-hover')) {
+      btn.style.transform = 'scale(0.96)';
+      setTimeout(() => btn.style.transform = '', 80);
+    }
+  });
+});
+
+// ── EDIT PROFILE ─────────────────────────────────────────────────
+const AVATAR_EMOJIS = ['🎮','🕹️','👾','🤖','🦾','🔥','⚡','💥','🌌','🎯','🏆','👑','🐉','🦊','🎲','🌀','🚀','💀','🎃','🌟'];
+let avatarIdx = 0;
+let editGenre = '';
+
+function getProfile() {
+  return JSON.parse(localStorage.getItem('gc_profile') || '{"name":"@GamerAnuj","bio":"Indie game developer & arcade enjoyer 🕹️ | Joined June 2024","avatar":"🎮","genre":"Arcade","website":""}');
+}
+function saveProfile(p) { localStorage.setItem('gc_profile', JSON.stringify(p)); }
+
+function applyProfileToPage(p) {
+  const nameEl = document.getElementById('profile-display-name');
+  const bioEl = document.getElementById('profile-display-bio');
+  const avatarBig = document.getElementById('profile-avatar-big');
+  if(nameEl) nameEl.textContent = p.name;
+  if(bioEl) bioEl.textContent = p.bio || 'No bio yet.';
+  if(avatarBig) { avatarBig.textContent = p.avatar || '🎮'; }
+}
+
+function openEditProfile() {
+  const p = getProfile();
+  document.getElementById('edit-username').value = p.name || '@GamerAnuj';
+  document.getElementById('edit-bio').value = p.bio || '';
+  document.getElementById('edit-website').value = p.website || '';
+  avatarIdx = AVATAR_EMOJIS.indexOf(p.avatar) !== -1 ? AVATAR_EMOJIS.indexOf(p.avatar) : 0;
+  document.getElementById('profile-avatar-preview').textContent = AVATAR_EMOJIS[avatarIdx];
+  editGenre = p.genre || '';
+  document.querySelectorAll('#edit-genre-grid .category-btn').forEach(b => {
+    b.classList.toggle('selected', b.dataset.g === editGenre);
+  });
+  document.querySelectorAll('#edit-genre-grid .category-btn').forEach(b => {
+    b.onclick = function() {
+      editGenre = this.dataset.g;
+      document.querySelectorAll('#edit-genre-grid .category-btn').forEach(x => x.classList.remove('selected'));
+      this.classList.add('selected');
+    };
+  });
+  document.getElementById('edit-profile-modal').style.display = 'block';
+  setTimeout(() => document.getElementById('edit-username').focus(), 100);
+}
+
+function closeEditProfile() {
+  document.getElementById('edit-profile-modal').style.display = 'none';
+}
+
+function closeEditProfileOnBg(e) {
+  if(e.target === document.getElementById('edit-profile-modal')) closeEditProfile();
+}
+
+function cycleAvatar() {
+  avatarIdx = (avatarIdx + 1) % AVATAR_EMOJIS.length;
+  document.getElementById('profile-avatar-preview').textContent = AVATAR_EMOJIS[avatarIdx];
+}
+
+function saveEditProfile() {
+  const name = document.getElementById('edit-username').value.trim();
+  if(!name) { showToast('Handle cannot be empty!', 'error'); return; }
+  const p = {
+    name: name.startsWith('@') ? name : '@' + name,
+    bio: document.getElementById('edit-bio').value.trim() || 'No bio yet.',
+    avatar: AVATAR_EMOJIS[avatarIdx],
+    genre: editGenre || 'Arcade',
+    website: document.getElementById('edit-website').value.trim(),
+  };
+  saveProfile(p);
+  applyProfileToPage(p);
+  closeEditProfile();
+  // Also update comment author name going forward
+  window._commentAuthorName = p.name;
+  showToast('Profile saved! Looking fresh 🔥', 'check_circle');
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+  if(e.key === 'Escape') closeEditProfile();
+});
+
+</script>
+
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-bottom-nav" id="mobile-nav">
+  <button onclick="navigate('home')" class="mobile-nav-btn" data-mnav="home">
+    <span class="material-symbols-outlined">explore</span>
+    <span>Explore</span>
+  </button>
+  <button onclick="navigate('community')" class="mobile-nav-btn" data-mnav="community">
+    <span class="material-symbols-outlined">grid_view</span>
+    <span>Discover</span>
+  </button>
+  <button onclick="navigate('upload')" class="mobile-nav-btn mobile-nav-cta" data-mnav="upload">
+    <span class="material-symbols-outlined fill-icon">upload</span>
+    <span>Upload</span>
+  </button>
+  <button onclick="navigate('leaderboard')" class="mobile-nav-btn" data-mnav="leaderboard">
+    <span class="material-symbols-outlined">emoji_events</span>
+    <span>Ranks</span>
+  </button>
+  <button onclick="navigate('profile')" class="mobile-nav-btn" data-mnav="profile">
+    <span class="material-symbols-outlined">person</span>
+    <span>Profile</span>
+  </button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- EDIT PROFILE MODAL                              -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="edit-profile-modal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);" onclick="closeEditProfileOnBg(event)">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 32px));background:var(--clr-surface-container-low);border:2px solid var(--clr-outline-variant);border-radius:var(--radius-lg);box-shadow:8px 8px 0 0 rgba(0,0,0,1);overflow:hidden;">
+    <!-- Modal Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--sp-md) var(--sp-lg);border-bottom:1px solid var(--clr-outline-variant);background:var(--clr-surface-container);">
+      <h2 class="font-headline-lg text-primary" style="font-size:24px">Edit Profile</h2>
+      <button onclick="closeEditProfile()" style="color:var(--clr-on-surface-variant);padding:var(--sp-xs);border-radius:var(--radius-full);transition:color 0.15s;" class="hover:text-error">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <!-- Modal Body -->
+    <div style="padding:var(--sp-lg);overflow-y:auto;max-height:70vh;">
+      <!-- Avatar Picker -->
+      <div style="text-align:center;margin-bottom:var(--sp-lg);">
+        <div id="profile-avatar-preview" style="width:80px;height:80px;border-radius:50%;margin:0 auto var(--sp-md);border:3px solid var(--clr-secondary);display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;box-shadow:4px 4px 0 0 rgba(0,0,0,1);" onclick="cycleAvatar()">🎮</div>
+        <p class="font-label-mono text-xs text-on-surface-variant">Click avatar to change emoji</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:var(--sp-md);">
+        <!-- Username -->
+        <div>
+          <label class="font-label-mono text-xs text-tertiary uppercase tracking-widest" style="display:block;margin-bottom:var(--sp-xs);">Username / Handle *</label>
+          <input id="edit-username" type="text" placeholder="@YourHandle" style="width:100%;background:var(--clr-surface-container-highest);border:2px solid var(--clr-outline-variant);border-radius:var(--radius);padding:var(--sp-sm) var(--sp-md);color:var(--clr-on-surface);font-family:'Rubik',sans-serif;font-size:16px;transition:border-color 0.15s;"/>
+        </div>
+        <!-- Bio -->
+        <div>
+          <label class="font-label-mono text-xs text-tertiary uppercase tracking-widest" style="display:block;margin-bottom:var(--sp-xs);">Bio / Status</label>
+          <textarea id="edit-bio" rows="2" placeholder="Tell the community who you are..." style="width:100%;background:var(--clr-surface-container-highest);border:2px solid var(--clr-outline-variant);border-radius:var(--radius);padding:var(--sp-sm) var(--sp-md);color:var(--clr-on-surface);font-family:'Rubik',sans-serif;font-size:16px;transition:border-color 0.15s;resize:vertical;"></textarea>
+        </div>
+        <!-- Favorite Genre -->
+        <div>
+          <label class="font-label-mono text-xs text-tertiary uppercase tracking-widest" style="display:block;margin-bottom:var(--sp-xs);">Favorite Genre</label>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-sm);" id="edit-genre-grid">
+            <button type="button" class="category-btn" data-g="Arcade" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:var(--sp-sm);background:var(--clr-surface-container-highest);border:2px solid var(--clr-outline-variant);border-radius:var(--radius);color:var(--clr-on-surface);cursor:pointer;font-size:14px;transition:all 0.15s;">🕹️<span>Arcade</span></button>
+            <button type="button" class="category-btn" data-g="RPG" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:var(--sp-sm);background:var(--clr-surface-container-highest);border:2px solid var(--clr-outline-variant);border-radius:var(--radius);color:var(--clr-on-surface);cursor:pointer;font-size:14px;transition:all 0.15s;">⚔️<span>RPG</span></button>
+            <button type="button" class="category-btn" data-g="Racing" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:var(--sp-sm);background:var(--clr-surface-container-highest);border:2px solid var(--clr-outline-variant);border-radius:var(--radius);color:var(--clr-on-surface);cursor:pointer;font-size:14px;transition:all 0.15s;">🏎️<span>Racing</span></button>
+            <button type="button" class="category-btn" data-g="Puzzle" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:var(--sp-sm);background:var(--clr-surface-container-highest);border:2px solid var(--clr-outline-variant);border-radius:var(--radius);color:var(--clr-on-surface);cursor:pointer;font-size:14px;transition:all 0.15s;">🧩<span>Puzzle</span></button>
+            <button type="button" class="category-btn" data-g="Action" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:var(--sp-sm);background:var(--clr-surface-container-highest);border:2px solid var(--clr-outline-variant);border-radius:var(--radius);color:var(--clr-on-surface);cursor:pointer;font-size:14px;transition:all 0.15s;">💥<span>Action</span></button>
+            <button type="button" class="category-btn" data-g="Strategy" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:var(--sp-sm);background:var(--clr-surface-container-highest);border:2px solid var(--clr-outline-variant);border-radius:var(--radius);color:var(--clr-on-surface);cursor:pointer;font-size:14px;transition:all 0.15s;">♟️<span>Strategy</span></button>
+          </div>
+        </div>
+        <!-- Social Links -->
+        <div>
+          <label class="font-label-mono text-xs text-tertiary uppercase tracking-widest" style="display:block;margin-bottom:var(--sp-xs);">Website / Portfolio URL</label>
+          <input id="edit-website" type="text" placeholder="https://yoursite.com" style="width:100%;background:var(--clr-surface-container-highest);border:2px solid var(--clr-outline-variant);border-radius:var(--radius);padding:var(--sp-sm) var(--sp-md);color:var(--clr-on-surface);font-family:'Rubik',sans-serif;font-size:16px;transition:border-color 0.15s;"/>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Footer -->
+    <div style="padding:var(--sp-md) var(--sp-lg);border-top:1px solid var(--clr-outline-variant);display:flex;gap:var(--sp-sm);justify-content:flex-end;background:var(--clr-surface-container);">
+      <button onclick="closeEditProfile()" style="padding:var(--sp-sm) var(--sp-md);background:var(--clr-surface-container-highest);color:var(--clr-on-surface-variant);border:2px solid var(--clr-outline-variant);border-radius:var(--radius-full);font-family:'Anybody',sans-serif;font-weight:700;font-size:16px;cursor:pointer;transition:all 0.15s;">CANCEL</button>
+      <button onclick="saveEditProfile()" style="padding:var(--sp-sm) var(--sp-lg);background:var(--clr-secondary-container);color:var(--clr-on-secondary-container);border:none;border-radius:var(--radius-full);font-family:'Anybody',sans-serif;font-weight:700;font-size:16px;cursor:pointer;box-shadow:4px 4px 0 0 rgba(0,0,0,1);transition:all 0.15s;" class="glow-lime">SAVE PROFILE ✓</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

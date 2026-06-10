@@ -1,0 +1,12 @@
+{
+  "name": "gamecloud",
+  "version": "1.0.0",
+  "description": "GameCloud - The free browser arcade",
+  "scripts": {
+    "start": "npx serve . -l 3000",
+    "build": "echo 'No build step needed'"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
