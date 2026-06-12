@@ -1449,25 +1449,29 @@ footer{margin-top:var(--sp-xl)}
 // ═══════════════════════════════════════════════════════════════════
 
 // ── 1. SUPABASE CONFIG ────────────────────────────────────────────
-// Replace these two values with your own from supabase.com → Project Settings → API
-const SUPABASE_URL = 'https://ktbawlgunoswffukpfei.supabase.co/rest/v1/';       // e.g. https://xyzabc.supabase.co
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0YmF3bGd1bm9zd2ZmdWtwZmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyNTY4ODEsImV4cCI6MjA5NjgzMjg4MX0.uLZxM_TeWfb97ruHId6rhuQ4NceR1oCuC2RVsSs8bpI'; // starts with eyJ...
 
-// ── 2. SUPABASE CLIENT (inline, no npm) ──────────────────────────
-// We load the Supabase JS SDK from jsDelivr CDN (added to <head>)
-// and create the client here once the SDK is ready.
+const SUPABASE_URL = 'https://ktbawlgunoswffukpfei.supabase.co';
+
+const SUPABASE_ANON_KEY =
+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0YmF3bGd1bm9zd2ZmdWtwZmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyNTY4ODEsImV4cCI6MjA5NjgzMjg4MX0.uLZxM_TeWfb97ruHId6rhuQ4NceR1oCuC2RVsSs8bpI';
+
+// ── 2. SUPABASE CLIENT ────────────────────────────────────────────
+
 let _sb = null;
+
 function sb() {
-  if(!_sb) _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  if (!_sb) {
+    _sb = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+  }
   return _sb;
 }
 
 // ── 3. SETUP CHECK ────────────────────────────────────────────────
-const SUPABASE_CONFIGURED = (
-  SUPABASE_URL !== 'https://ktbawlgunoswffukpfei.supabase.co/rest/v1/' &&
-  SUPABASE_ANON_KEY !== 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0YmF3bGd1bm9zd2ZmdWtwZmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyNTY4ODEsImV4cCI6MjA5NjgzMjg4MX0.uLZxM_TeWfb97ruHId6rhuQ4NceR1oCuC2RVsSs8bpI' &&
-  SUPABASE_URL.startsWith('https://')
-);
+
+const SUPABASE_CONFIGURED = true;
 
 // ── 4. CONSTANTS ──────────────────────────────────────────────────
 const GENRES = ['Arcade','RPG','Racing','Puzzle','Action','Strategy'];
