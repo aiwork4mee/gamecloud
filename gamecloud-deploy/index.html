@@ -757,6 +757,7 @@ footer{margin-top:var(--sp-xl)}
   ::-webkit-scrollbar-thumb { background:#353534; border-radius:3px; }
   ::-webkit-scrollbar-thumb:hover { background:#514255; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body class="bg-background text-on-background font-body-md min-h-screen">
 
@@ -1441,42 +1442,337 @@ footer{margin-top:var(--sp-xl)}
 </footer>
 
 <script>
+// ═══════════════════════════════════════════════════════════════════
+//  GAMECLOUD — SUPABASE EDITION
+//  Data layer: Supabase (Postgres + Storage)
+//  UI layer:   unchanged — same HTML/CSS
+// ═══════════════════════════════════════════════════════════════════
+
+// ── 1. SUPABASE CONFIG ────────────────────────────────────────────
+// Replace these two values with your own from supabase.com → Project Settings → API
+const SUPABASE_URL = 'https://ktbawlgunoswffukpfei.supabase.co/rest/v1/';       // e.g. https://xyzabc.supabase.co
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0YmF3bGd1bm9zd2ZmdWtwZmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyNTY4ODEsImV4cCI6MjA5NjgzMjg4MX0.uLZxM_TeWfb97ruHId6rhuQ4NceR1oCuC2RVsSs8bpI'; // starts with eyJ...
+
+// ── 2. SUPABASE CLIENT (inline, no npm) ──────────────────────────
+// We load the Supabase JS SDK from jsDelivr CDN (added to <head>)
+// and create the client here once the SDK is ready.
+let _sb = null;
+function sb() {
+  if(!_sb) _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return _sb;
+}
+
+// ── 3. SETUP CHECK ────────────────────────────────────────────────
+const SUPABASE_CONFIGURED = (
+  SUPABASE_URL !== 'https://ktbawlgunoswffukpfei.supabase.co/rest/v1/' &&
+  SUPABASE_ANON_KEY !== 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0YmF3bGd1bm9zd2ZmdWtwZmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyNTY4ODEsImV4cCI6MjA5NjgzMjg4MX0.uLZxM_TeWfb97ruHId6rhuQ4NceR1oCuC2RVsSs8bpI' &&
+  SUPABASE_URL.startsWith('https://')
+);
+
+// ── 4. CONSTANTS ──────────────────────────────────────────────────
 const GENRES = ['Arcade','RPG','Racing','Puzzle','Action','Strategy'];
 const COLORS = ['#ecb2ff','#edffe1','#00dbe9','#32ff00','#ffb4ab','#7df4ff'];
 const GENRE_EMOJI = {Arcade:'🕹️',RPG:'⚔️',Racing:'🏎️',Puzzle:'🧩',Action:'💥',Strategy:'♟️'};
 
-let games = JSON.parse(localStorage.getItem('gc_games') || 'null') || [
-  { id:'neon-overdrive', title:'Neon Overdrive', author:'@PixelPhantom', desc:'Master the grid in this high-speed tactical brawler. Loot rare cores, customize your rig, and dominate the digital underworld.', genre:'Arcade', tags:['cyberpunk','roguelike','arcade'], rating:4.9, ratingCount:1240, plays:12400, hype:8400, date:'2024-05-01', uploaded:false, htmlContent: null },
-  { id:'vapor-runner', title:'Vapor Runner', author:'@SynthWaveKid', desc:'An endless synthwave racing experience. Navigate neon highways at breakneck speed. Can you survive the grid?', genre:'Racing', tags:['synthwave','racing','endless'], rating:4.7, ratingCount:880, plays:9800, hype:6200, date:'2024-05-05', uploaded:false, htmlContent: null },
-  { id:'core-meltdown', title:'Core Meltdown', author:'@CodeWitch', desc:'A fiendish puzzle game where you manipulate reactor cores to prevent a catastrophic meltdown. 48 devilish levels.', genre:'Puzzle', tags:['puzzle','strategy','nuclear'], rating:4.6, ratingCount:760, plays:7200, hype:5100, date:'2024-05-10', uploaded:false, htmlContent: null },
-  { id:'bit-battalion', title:'Bit Battalion', author:'@RetroFuturist', desc:'Lead your pixel army through 8 brutal campaigns. Turn-based strategy with real-time battles. 8-bit aesthetics, modern depth.', genre:'Strategy', tags:['strategy','pixel-art','turn-based'], rating:4.5, ratingCount:630, plays:6100, hype:4300, date:'2024-05-14', uploaded:false, htmlContent: null },
-  { id:'data-heist', title:'Data Heist', author:'@GlitchMaster', desc:'You\'re a rogue AI. You have 60 seconds. Steal the data. Don\'t get caught. A frantic stealth-action game.', genre:'Action', tags:['stealth','action','cyberpunk'], rating:4.4, ratingCount:520, plays:5500, hype:3800, date:'2024-05-18', uploaded:false, htmlContent: null },
-  { id:'dungeon-forge', title:'Dungeon Forge', author:'@DungeonDev', desc:'Build your dungeon, trap heroes, amass gold. A reverse dungeon-master RPG with procedural hero waves.', genre:'RPG', tags:['rpg','dungeon','strategy'], rating:4.3, ratingCount:480, plays:4900, hype:3200, date:'2024-05-20', uploaded:false, htmlContent: null },
-  { id:'grid-surfer', title:'Grid Surfer', author:'@WaveRider99', desc:'Ride procedurally generated data waves in this hypnotic skill game. Perfect for speedrunners.', genre:'Arcade', tags:['arcade','speedrun','procedural'], rating:4.2, ratingCount:390, plays:4100, hype:2800, date:'2024-05-22', uploaded:false, htmlContent: null },
-  { id:'turbo-drift', title:'Turbo Drift X', author:'@NitroKing', desc:'The most ridiculous drifting simulator on the internet. Neon tracks, impossible physics, maximum fun.', genre:'Racing', tags:['racing','drift','physics'], rating:4.1, ratingCount:340, plays:3600, hype:2400, date:'2024-05-25', uploaded:false, htmlContent: null },
-];
-
+// ── 5. LOCAL STATE ────────────────────────────────────────────────
+// In-memory cache — avoids repeated DB fetches for the same session
+let games = [];
 let userRatings = JSON.parse(localStorage.getItem('gc_ratings') || '{}');
-let comments = JSON.parse(localStorage.getItem('gc_comments') || '{}');
+let comments = {}; // keyed by game id, populated on demand
 let currentPage = 'home';
 let currentGameId = null;
 let currentLbMode = 'rated';
 let communityGenreFilter = 'all';
 
-function saveData() {
-  localStorage.setItem('gc_games', JSON.stringify(games));
-  localStorage.setItem('gc_ratings', JSON.stringify(userRatings));
-  localStorage.setItem('gc_comments', JSON.stringify(comments));
+// ── 6. SEED DATA (fallback when Supabase not configured) ──────────
+const SEED_GAMES = [
+  { id:'neon-overdrive', title:'Neon Overdrive', author:'@PixelPhantom', desc:'Master the grid in this high-speed tactical brawler. Loot rare cores, customize your rig, and dominate the digital underworld.', genre:'Arcade', tags:['cyberpunk','roguelike','arcade'], rating:4.9, rating_count:1240, plays:12400, hype:8400, created_at:'2024-05-01', html_content:null },
+  { id:'vapor-runner', title:'Vapor Runner', author:'@SynthWaveKid', desc:'An endless synthwave racing experience. Navigate neon highways at breakneck speed. Can you survive the grid?', genre:'Racing', tags:['synthwave','racing','endless'], rating:4.7, rating_count:880, plays:9800, hype:6200, created_at:'2024-05-05', html_content:null },
+  { id:'core-meltdown', title:'Core Meltdown', author:'@CodeWitch', desc:'A fiendish puzzle game where you manipulate reactor cores to prevent a catastrophic meltdown. 48 devilish levels.', genre:'Puzzle', tags:['puzzle','strategy','nuclear'], rating:4.6, rating_count:760, plays:7200, hype:5100, created_at:'2024-05-10', html_content:null },
+  { id:'bit-battalion', title:'Bit Battalion', author:'@RetroFuturist', desc:'Lead your pixel army through 8 brutal campaigns. Turn-based strategy with real-time battles. 8-bit aesthetics, modern depth.', genre:'Strategy', tags:['strategy','pixel-art','turn-based'], rating:4.5, rating_count:630, plays:6100, hype:4300, created_at:'2024-05-14', html_content:null },
+  { id:'data-heist', title:'Data Heist', author:'@GlitchMaster', desc:"You're a rogue AI. You have 60 seconds. Steal the data. Don't get caught. A frantic stealth-action game.", genre:'Action', tags:['stealth','action','cyberpunk'], rating:4.4, rating_count:520, plays:5500, hype:3800, created_at:'2024-05-18', html_content:null },
+  { id:'dungeon-forge', title:'Dungeon Forge', author:'@DungeonDev', desc:'Build your dungeon, trap heroes, amass gold. A reverse dungeon-master RPG with procedural hero waves.', genre:'RPG', tags:['rpg','dungeon','strategy'], rating:4.3, rating_count:480, plays:4900, hype:3200, created_at:'2024-05-20', html_content:null },
+  { id:'grid-surfer', title:'Grid Surfer', author:'@WaveRider99', desc:'Ride procedurally generated data waves in this hypnotic skill game. Perfect for speedrunners.', genre:'Arcade', tags:['arcade','speedrun','procedural'], rating:4.2, rating_count:390, plays:4100, hype:2800, created_at:'2024-05-22', html_content:null },
+  { id:'turbo-drift', title:'Turbo Drift X', author:'@NitroKing', desc:'The most ridiculous drifting simulator on the internet. Neon tracks, impossible physics, maximum fun.', genre:'Racing', tags:['racing','drift','physics'], rating:4.1, rating_count:340, plays:3600, hype:2400, created_at:'2024-05-25', html_content:null },
+];
+
+// ── 7. DATA ACCESS LAYER ──────────────────────────────────────────
+// All DB calls go through these helpers.
+// If Supabase is not configured → fall back to localStorage/seed data.
+
+async function dbLoadGames() {
+  if(!SUPABASE_CONFIGURED) {
+    // Fallback: localStorage + seed
+    const stored = JSON.parse(localStorage.getItem('gc_games') || 'null');
+    games = stored || SEED_GAMES.map(g => ({...g}));
+    return;
+  }
+  try {
+    showGlobalLoader(true);
+    const { data, error } = await sb()
+      .from('games')
+      .select('id,title,author,desc,genre,tags,rating,rating_count,plays,hype,created_at,html_content')
+      .order('created_at', { ascending: false });
+    if(error) throw error;
+    // Merge seed games if DB is empty (first run)
+    if(data.length === 0) {
+      games = SEED_GAMES.map(g => ({...g}));
+      // Insert seed games into DB so everyone sees them
+      await sb().from('games').upsert(
+        SEED_GAMES.map(g => ({
+          id: g.id, title: g.title, author: g.author,
+          desc: g.desc, genre: g.genre, tags: g.tags,
+          rating: g.rating, rating_count: g.rating_count,
+          plays: g.plays, hype: g.hype,
+          created_at: g.created_at, html_content: null
+        })), { onConflict: 'id' }
+      );
+    } else {
+      games = data.map(normalizeGame);
+    }
+  } catch(e) {
+    console.warn('Supabase load failed, using local fallback:', e.message);
+    games = JSON.parse(localStorage.getItem('gc_games') || 'null') || SEED_GAMES.map(g=>({...g}));
+  } finally {
+    showGlobalLoader(false);
+  }
 }
+
+async function dbSaveGame(game) {
+  if(!SUPABASE_CONFIGURED) {
+    localStorage.setItem('gc_games', JSON.stringify(games));
+    return;
+  }
+  try {
+    const row = gameToRow(game);
+    const { error } = await sb().from('games').upsert(row, { onConflict: 'id' });
+    if(error) throw error;
+  } catch(e) {
+    console.warn('dbSaveGame failed:', e.message);
+    localStorage.setItem('gc_games', JSON.stringify(games));
+  }
+}
+
+async function dbIncrementPlays(gameId) {
+  if(!SUPABASE_CONFIGURED) { localStorage.setItem('gc_games', JSON.stringify(games)); return; }
+  try {
+    await sb().rpc('increment_plays', { game_id: gameId });
+  } catch(e) { /* non-critical */ }
+}
+
+async function dbSaveRating(gameId, rating, newAvg, newCount) {
+  if(!SUPABASE_CONFIGURED) {
+    localStorage.setItem('gc_ratings', JSON.stringify(userRatings));
+    localStorage.setItem('gc_games', JSON.stringify(games));
+    return;
+  }
+  try {
+    const uid = getUid();
+    // Upsert user rating
+    await sb().from('ratings').upsert({ game_id: gameId, uid, value: rating }, { onConflict: 'game_id,uid' });
+    // Update game avg
+    await sb().from('games').update({ rating: newAvg, rating_count: newCount }).eq('id', gameId);
+  } catch(e) {
+    console.warn('dbSaveRating failed:', e.message);
+    localStorage.setItem('gc_ratings', JSON.stringify(userRatings));
+  }
+}
+
+async function dbLoadRatingsForUser() {
+  if(!SUPABASE_CONFIGURED) {
+    userRatings = JSON.parse(localStorage.getItem('gc_ratings') || '{}');
+    return;
+  }
+  try {
+    const uid = getUid();
+    const { data } = await sb().from('ratings').select('game_id,value').eq('uid', uid);
+    if(data) data.forEach(r => { userRatings[r.game_id] = r.value; });
+  } catch(e) { /* non-critical */ }
+}
+
+async function dbSaveHype(gameId) {
+  if(!SUPABASE_CONFIGURED) {
+    localStorage.setItem('gc_games', JSON.stringify(games));
+    return;
+  }
+  try {
+    const uid = getUid();
+    await sb().from('hypes').insert({ game_id: gameId, uid });
+    await sb().rpc('increment_hype', { game_id: gameId });
+  } catch(e) {
+    console.warn('dbSaveHype failed:', e.message);
+  }
+}
+
+async function dbCheckHyped(gameId) {
+  // Always check localStorage first (fast)
+  const hyped = JSON.parse(localStorage.getItem('gc_hyped') || '{}');
+  if(hyped[gameId]) return true;
+  if(!SUPABASE_CONFIGURED) return false;
+  try {
+    const uid = getUid();
+    const { data } = await sb().from('hypes').select('id').eq('game_id', gameId).eq('uid', uid).maybeSingle();
+    return !!data;
+  } catch(e) { return false; }
+}
+
+async function dbLoadComments(gameId) {
+  if(!SUPABASE_CONFIGURED) {
+    return JSON.parse(localStorage.getItem('gc_comments') || '{}')[gameId] || [];
+  }
+  try {
+    const { data } = await sb()
+      .from('comments')
+      .select('id,author,text,color,created_at')
+      .eq('game_id', gameId)
+      .order('created_at', { ascending: false })
+      .limit(50);
+    return (data||[]).map(c => ({
+      name: c.author,
+      text: c.text,
+      color: c.color || '#ecb2ff',
+      time: timeAgo(c.created_at)
+    }));
+  } catch(e) {
+    return JSON.parse(localStorage.getItem('gc_comments') || '{}')[gameId] || [];
+  }
+}
+
+async function dbPostComment(gameId, text, authorName, color) {
+  if(!SUPABASE_CONFIGURED) {
+    const all = JSON.parse(localStorage.getItem('gc_comments') || '{}');
+    if(!all[gameId]) all[gameId] = [];
+    all[gameId].unshift({ name: authorName, text, color, time: 'Just now' });
+    localStorage.setItem('gc_comments', JSON.stringify(all));
+    return { name: authorName, text, color, time: 'Just now' };
+  }
+  try {
+    const { data, error } = await sb().from('comments').insert({
+      game_id: gameId, author: authorName, text, color
+    }).select().single();
+    if(error) throw error;
+    return { name: authorName, text, color, time: 'Just now' };
+  } catch(e) {
+    console.warn('dbPostComment failed:', e.message);
+    return null;
+  }
+}
+
+async function dbUploadGame(game, htmlContent) {
+  if(!SUPABASE_CONFIGURED) {
+    game.html_content = htmlContent;
+    games.unshift(game);
+    localStorage.setItem('gc_games', JSON.stringify(games));
+    return game;
+  }
+  try {
+    showUploadProgress('Saving to the Vault...', 60);
+    // Store HTML content as text in the games table (maximizes free tier)
+    game.html_content = htmlContent;
+    const row = gameToRow(game);
+    const { data, error } = await sb().from('games').insert(row).select().single();
+    if(error) throw error;
+    const saved = normalizeGame(data);
+    games.unshift(saved);
+    showUploadProgress('All systems go! 🚀', 100);
+    return saved;
+  } catch(e) {
+    console.error('dbUploadGame failed:', e.message);
+    // Fallback: save locally
+    game.html_content = htmlContent;
+    games.unshift(game);
+    localStorage.setItem('gc_games', JSON.stringify(games));
+    return game;
+  }
+}
+
+// ── 8. HELPERS ────────────────────────────────────────────────────
+
+function normalizeGame(row) {
+  return {
+    id: row.id,
+    title: row.title,
+    author: row.author,
+    desc: row.desc,
+    genre: row.genre,
+    tags: Array.isArray(row.tags) ? row.tags : (row.tags ? row.tags.split(',') : []),
+    rating: parseFloat(row.rating) || 0,
+    ratingCount: row.rating_count || 0,
+    plays: row.plays || 0,
+    hype: row.hype || 0,
+    date: (row.created_at || '').slice(0,10),
+    uploaded: !!row.html_content,
+    html_content: row.html_content || null,
+    htmlContent: row.html_content || null, // alias
+  };
+}
+
+function gameToRow(g) {
+  return {
+    id: g.id,
+    title: g.title,
+    author: g.author,
+    desc: g.desc,
+    genre: g.genre,
+    tags: Array.isArray(g.tags) ? g.tags : [],
+    rating: g.rating || 0,
+    rating_count: g.ratingCount || g.rating_count || 0,
+    plays: g.plays || 0,
+    hype: g.hype || 0,
+    created_at: g.date || new Date().toISOString().slice(0,10),
+    html_content: g.html_content || g.htmlContent || null,
+  };
+}
+
+function getUid() {
+  let uid = localStorage.getItem('gc_uid');
+  if(!uid) { uid = 'u_' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('gc_uid', uid); }
+  return uid;
+}
+
+function timeAgo(isoStr) {
+  if(!isoStr) return 'Just now';
+  const d = (Date.now() - new Date(isoStr).getTime()) / 1000;
+  if(d < 60) return 'Just now';
+  if(d < 3600) return Math.floor(d/60)+'m ago';
+  if(d < 86400) return Math.floor(d/3600)+'h ago';
+  return Math.floor(d/86400)+'d ago';
+}
+
+function showGlobalLoader(show) {
+  let el = document.getElementById('gc-global-loader');
+  if(!el) {
+    el = document.createElement('div');
+    el.id = 'gc-global-loader';
+    el.style.cssText = 'position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--clr-primary),var(--clr-tertiary),var(--clr-secondary));z-index:9999;transition:opacity 0.3s;animation:loader-slide 1.2s ease-in-out infinite;';
+    document.body.prepend(el);
+    const style = document.createElement('style');
+    style.textContent = '@keyframes loader-slide{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}';
+    document.head.append(style);
+  }
+  el.style.opacity = show ? '1' : '0';
+}
+
+function showUploadProgress(msg, pct) {
+  const bar = document.getElementById('integrity-bar');
+  const pctEl = document.getElementById('integrity-pct');
+  if(bar) bar.style.width = pct+'%';
+  if(pctEl) pctEl.textContent = msg;
+}
+
+// ── 9. NAVIGATION ─────────────────────────────────────────────────
 
 function navigate(page, gameId) {
   document.querySelectorAll('[data-page]').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
   const pageEl = document.querySelector(`[data-page="${page}"]`);
-  if(pageEl) { pageEl.classList.add('active'); pageEl.querySelector('main') && (pageEl.querySelector('main').classList.remove('slide-in'), void pageEl.offsetWidth, pageEl.querySelector('main').classList.add('slide-in')); }
+  if(pageEl) {
+    pageEl.classList.add('active');
+    const main = pageEl.querySelector('main');
+    if(main) { main.classList.remove('slide-in'); void main.offsetWidth; main.classList.add('slide-in'); }
+  }
   const navEl = document.querySelector(`[data-nav="${page}"]`);
   if(navEl) navEl.classList.add('active');
-  // Update mobile nav
   document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
   const mobileBtn = document.querySelector(`[data-mnav="${page}"]`);
   if(mobileBtn) mobileBtn.classList.add('active');
@@ -1489,6 +1785,8 @@ function navigate(page, gameId) {
   if(page === 'upload') initUploadPage();
 }
 
+// ── 10. TOAST ─────────────────────────────────────────────────────
+
 function showToast(msg, icon='check_circle') {
   const t = document.getElementById('toast');
   document.getElementById('toast-msg').textContent = msg;
@@ -1496,6 +1794,8 @@ function showToast(msg, icon='check_circle') {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
+
+// ── 11. CARD RENDERERS ────────────────────────────────────────────
 
 function makeStars(rating) {
   const full = Math.floor(rating);
@@ -1506,11 +1806,12 @@ function makeStars(rating) {
   return s;
 }
 
-function makeGameCard(g, size='normal') {
+function makeGameCard(g) {
   const colorIdx = GENRES.indexOf(g.genre) % COLORS.length;
   const accent = COLORS[colorIdx] || '#ecb2ff';
+  const isYours = g.uploaded || g.html_content;
   return `
-  <div class="game-card bg-surface-container rounded-lg border border-outline-variant hard-shadow cursor-pointer overflow-hidden group" onclick="navigate('game','${g.id}')">
+  <div class="game-card bg-surface-container rounded-lg border border-outline-variant hard-shadow cursor-pointer overflow-hidden group" onclick="navigate('game','${escapeHtml(g.id)}')">
     <div class="relative overflow-hidden" style="aspect-ratio:16/9; background: radial-gradient(ellipse at center, ${accent}22 0%, #131313 80%);">
       <div class="absolute inset-0 scanline opacity-20"></div>
       <div class="absolute inset-0 flex items-center justify-center">
@@ -1522,13 +1823,13 @@ function makeGameCard(g, size='normal') {
         </div>
       </div>
       <div class="absolute top-sm left-sm">
-        <span class="px-sm py-xs rounded-full font-label-mono text-xs" style="background:${accent}22; color:${accent}; border: 1px solid ${accent}66">${g.genre}</span>
+        <span class="px-sm py-xs rounded-full font-label-mono text-xs" style="background:${accent}22; color:${accent}; border: 1px solid ${accent}66">${escapeHtml(g.genre)}</span>
       </div>
-      ${g.uploaded ? '<div class="absolute top-sm right-sm"><span class="px-sm py-xs bg-secondary-container text-on-secondary-container rounded-full font-label-mono text-xs">YOUR GAME</span></div>' : ''}
+      ${isYours ? '<div class="absolute top-sm right-sm"><span class="px-sm py-xs bg-secondary-container text-on-secondary-container rounded-full font-label-mono text-xs">YOUR GAME</span></div>' : ''}
     </div>
     <div class="p-md">
-      <h3 class="font-button-text text-on-surface group-hover:text-tertiary transition-colors truncate">${g.title}</h3>
-      <p class="font-label-mono text-xs text-on-surface-variant mb-sm truncate">${g.author}</p>
+      <h3 class="font-button-text text-on-surface group-hover:text-tertiary transition-colors truncate">${escapeHtml(g.title)}</h3>
+      <p class="font-label-mono text-xs text-on-surface-variant mb-sm truncate">${escapeHtml(g.author)}</p>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-xs">${makeStars(g.rating)} <span class="font-label-mono text-xs text-on-surface-variant ml-xs">${g.rating.toFixed(1)}</span></div>
         <span class="font-label-mono text-xs text-on-surface-variant">${fmtNum(g.plays)} plays</span>
@@ -1541,14 +1842,14 @@ function makeListItem(g, rank) {
   const colorIdx = GENRES.indexOf(g.genre) % COLORS.length;
   const accent = COLORS[colorIdx] || '#ecb2ff';
   return `
-  <div class="flex items-center gap-md p-md hover:bg-surface-container-high transition-colors cursor-pointer group" onclick="navigate('game','${g.id}')">
+  <div class="flex items-center gap-md p-md hover:bg-surface-container-high transition-colors cursor-pointer group" onclick="navigate('game','${escapeHtml(g.id)}')">
     <span class="font-headline-lg text-3xl w-8 text-center flex-shrink-0" style="color:${accent}">${rank}</span>
     <div class="w-12 h-12 rounded flex-shrink-0 flex items-center justify-center" style="background:${accent}22">
       <span class="text-2xl">${GENRE_EMOJI[g.genre]||'🎮'}</span>
     </div>
     <div class="flex-grow min-w-0">
-      <h4 class="font-button-text text-on-surface group-hover:text-tertiary transition-colors truncate">${g.title}</h4>
-      <p class="font-label-mono text-xs text-on-surface-variant">${g.author} · ${g.genre}</p>
+      <h4 class="font-button-text text-on-surface group-hover:text-tertiary transition-colors truncate">${escapeHtml(g.title)}</h4>
+      <p class="font-label-mono text-xs text-on-surface-variant">${escapeHtml(g.author)} · ${escapeHtml(g.genre)}</p>
     </div>
     <div class="text-right flex-shrink-0">
       <p class="font-label-mono text-xs" style="color:${accent}">${g.rating.toFixed(1)} ⭐</p>
@@ -1560,23 +1861,24 @@ function makeListItem(g, rank) {
 function fmtNum(n) {
   if(n >= 1000000) return (n/1000000).toFixed(1)+'M';
   if(n >= 1000) return (n/1000).toFixed(1)+'k';
-  return n.toString();
+  return String(n||0);
 }
+
+// ── 12. HOME PAGE ─────────────────────────────────────────────────
 
 function renderHome() {
   const sorted = [...games].sort((a,b) => b.rating - a.rating);
-  const hot = sorted.slice(0,4);
-  document.getElementById('hot-games-grid').innerHTML = hot.map(g => makeGameCard(g)).join('');
+  document.getElementById('hot-games-grid').innerHTML = sorted.slice(0,4).map(g => makeGameCard(g)).join('');
 
-  const newGames = [...games].sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,4);
+  const newGames = [...games].sort((a,b) => new Date(b.date||b.created_at)-new Date(a.date||a.created_at)).slice(0,4);
   document.getElementById('new-games-list').innerHTML = newGames.map((g,i) => {
     const accent = COLORS[GENRES.indexOf(g.genre)%COLORS.length] || '#ecb2ff';
-    return `<div class="flex items-center gap-md p-sm rounded-lg border border-outline-variant bg-surface-container cursor-pointer hover:bg-surface-container-high transition-all group" onclick="navigate('game','${g.id}')">
+    return `<div class="flex items-center gap-md p-sm rounded-lg border border-outline-variant bg-surface-container cursor-pointer hover:bg-surface-container-high transition-all group" onclick="navigate('game','${escapeHtml(g.id)}')">
       <span class="font-label-mono text-xs w-6 text-center" style="color:${accent}">${i+1}</span>
       <div class="w-10 h-10 rounded flex items-center justify-center flex-shrink-0" style="background:${accent}22"><span class="text-xl">${GENRE_EMOJI[g.genre]||'🎮'}</span></div>
       <div class="flex-grow min-w-0">
-        <h4 class="font-button-text text-sm text-on-surface group-hover:text-tertiary transition-colors truncate">${g.title}</h4>
-        <p class="font-label-mono text-xs text-on-surface-variant">${g.author}</p>
+        <h4 class="font-button-text text-sm text-on-surface group-hover:text-tertiary transition-colors truncate">${escapeHtml(g.title)}</h4>
+        <p class="font-label-mono text-xs text-on-surface-variant">${escapeHtml(g.author)}</p>
       </div>
       <span class="px-sm py-xs rounded-full font-label-mono text-xs" style="background:${accent}22;color:${accent}">NEW</span>
     </div>`;
@@ -1585,32 +1887,50 @@ function renderHome() {
   const lb = sorted.slice(0,5);
   document.getElementById('sidebar-leaderboard').innerHTML = lb.map((g,i) => {
     const accent = i===0?'#32ff00':i===1?'#ecb2ff':'#00dbe9';
-    return `<div class="flex items-center gap-sm cursor-pointer hover:bg-surface-container-high px-sm py-xs rounded transition-colors" onclick="navigate('game','${g.id}')">
+    return `<div class="flex items-center gap-sm cursor-pointer hover:bg-surface-container-high px-sm py-xs rounded transition-colors" onclick="navigate('game','${escapeHtml(g.id)}')">
       <span class="font-label-mono text-sm font-bold w-5 text-center" style="color:${accent}">${i+1}</span>
       <div class="flex-grow min-w-0">
-        <p class="font-button-text text-sm text-on-surface truncate">${g.title}</p>
-        <p class="font-label-mono text-xs text-on-surface-variant">${g.author}</p>
+        <p class="font-button-text text-sm text-on-surface truncate">${escapeHtml(g.title)}</p>
+        <p class="font-label-mono text-xs text-on-surface-variant">${escapeHtml(g.author)}</p>
       </div>
       <span class="font-label-mono text-xs" style="color:${accent}">★${g.rating.toFixed(1)}</span>
     </div>`;
   }).join('');
 
   const trending = [...games].sort((a,b) => b.plays - a.plays).slice(0,4);
-  document.getElementById('trending-grid').innerHTML = trending.map(g => makeGameCard(g,'small')).join('');
+  document.getElementById('trending-grid').innerHTML = trending.map(g => makeGameCard(g)).join('');
+
+  // Update live stats
+  const statsGames = document.querySelector('#hot-games-grid')?.closest('main')?.querySelectorAll?.('.font-headline-lg.text-2xl');
+  // Update community stats widget with real numbers
+  updateCommunityStats();
 }
+
+function updateCommunityStats() {
+  const statEls = document.querySelectorAll('.community-stat');
+  // Recalculate from live game data
+  const totalGames = games.length;
+  const totalPlays = games.reduce((s,g) => s+(g.plays||0), 0);
+  const totalRatings = games.reduce((s,g) => s+(g.ratingCount||g.rating_count||0), 0);
+  // Find all stat boxes in the stats widget by their text label
+  document.querySelectorAll('#home-stat-games').forEach(el => el.textContent = fmtNum(totalGames));
+  document.querySelectorAll('#home-stat-plays').forEach(el => el.textContent = fmtNum(totalPlays));
+  document.querySelectorAll('#home-stat-ratings').forEach(el => el.textContent = fmtNum(totalRatings));
+}
+
+// ── 13. GAME DETAIL PAGE ──────────────────────────────────────────
+
+let _activeBlobUrl = null;
 
 function loadGamePage(id) {
   const g = games.find(x => x.id === id);
   if(!g) { navigate('home'); return; }
 
-  // ── STEP 1: Kill any running game iframe FIRST ──────────────────
+  // Kill any running game first
   if(_activeBlobUrl) { try { URL.revokeObjectURL(_activeBlobUrl); } catch(e){} _activeBlobUrl = null; }
   const area = document.getElementById('game-play-area');
   if(area) {
     area.querySelectorAll('iframe').forEach(f => { try { f.src = 'about:blank'; } catch(e){} f.remove(); });
-    // Rebuild the play area placeholder with correct game title
-    // Note: game-title-display and game-version-display live INSIDE the play area,
-    // so we must rebuild it here (not wipe + set separately).
     area.innerHTML = `
       <div class="text-center" id="play-placeholder">
         <div style="width:96px;height:96px;background:var(--clr-secondary-container);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:4px 4px 0 0 rgba(0,0,0,1);cursor:pointer;margin:0 auto var(--sp-md);" onclick="startGame()">
@@ -1622,160 +1942,128 @@ function loadGamePage(id) {
       </div>`;
   }
 
-  // ── STEP 2: Update all metadata fields AFTER play area is rebuilt ─
   currentGameId = id;
-  g.plays = (g.plays || 0) + 1;
-  saveData();
+  // Increment plays (fire and forget)
+  g.plays = (g.plays||0) + 1;
+  dbIncrementPlays(id);
 
   function setEl(elId, value, prop='textContent') {
     const el = document.getElementById(elId);
     if(el) el[prop] = value;
   }
-
   setEl('game-breadcrumb', g.title);
   setEl('game-full-title', g.title);
   setEl('game-author', g.author);
   setEl('game-description', g.desc);
-  setEl('game-hype', fmtNum(g.hype || 0));
+  setEl('game-hype', fmtNum(g.hype||0));
   setEl('stat-plays', fmtNum(g.plays));
   setEl('stat-rating', g.rating.toFixed(1));
-  setEl('stat-date', g.date.slice(0,7));
+  setEl('stat-date', (g.date||g.created_at||'').slice(0,7));
   setEl('stat-hype-pct', Math.min(99, Math.round((g.hype||0)/100))+'%');
   const hypeBar = document.getElementById('stat-hype-bar');
   if(hypeBar) hypeBar.style.width = Math.min(99, Math.round((g.hype||0)/100))+'%';
 
   const tags = document.getElementById('game-tags');
   if(tags) tags.innerHTML = (g.tags||[]).map(t =>
-    `<span style="padding:2px 10px;background:var(--clr-surface-container-highest);border:1px solid var(--clr-outline-variant);color:var(--clr-tertiary);font-family:'JetBrains Mono',monospace;font-size:12px;border-radius:6px;">#${escapeHtml(t.toUpperCase())}</span>`
+    `<span style="padding:2px 10px;background:var(--clr-surface-container-highest);border:1px solid var(--clr-outline-variant);color:var(--clr-tertiary);font-family:'JetBrains Mono',monospace;font-size:12px;border-radius:6px;">#${escapeHtml(String(t).toUpperCase())}</span>`
   ).join('');
 
   updateRatingDisplay(g);
   const ur = userRatings[id];
   setEl('your-rating-msg', ur ? `You rated this ${ur} star${ur>1?'s':''}! ⭐` : 'Click stars to rate!');
-  highlightStars(ur || 0);
+  highlightStars(ur||0);
 
+  // Load comments async
   renderComments(id);
   renderRelatedGames(g);
   setTimeout(updateHypeBtn, 50);
 }
-
-// Track active blob URL so we can revoke it when navigating away
-let _activeBlobUrl = null;
 
 function startGame() {
   const g = games.find(x => x.id === currentGameId);
   if(!g) return;
   const area = document.getElementById('game-play-area');
   if(!area) return;
-
-  // Revoke stale blob URL if any
   if(_activeBlobUrl) { try { URL.revokeObjectURL(_activeBlobUrl); } catch(e){} _activeBlobUrl = null; }
-
-  // Remove placeholder
   area.innerHTML = '';
-
-  // Build iframe — always use srcdoc so it works on file://, http://, https:// equally
   const iframe = document.createElement('iframe');
-  const htmlContent = (g.htmlContent && g.uploaded) ? g.htmlContent : makeDemoGame(g);
-  // srcdoc is safest across all origins; encode &/"/< for attribute safety
+  const htmlContent = (g.html_content || g.htmlContent) ? (g.html_content || g.htmlContent) : makeDemoGame(g);
   iframe.setAttribute('srcdoc', htmlContent);
   iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-pointer-lock');
   iframe.style.cssText = 'width:100%;height:100%;border:none;border-radius:var(--radius);display:block;';
   iframe.setAttribute('allowfullscreen', '');
   area.appendChild(iframe);
-
-  if(g.htmlContent && g.uploaded) {
-    showToast(`${g.title} launched! 🚀`, 'rocket_launch');
+  if(g.html_content || g.htmlContent) {
+    showToast(`${escapeHtml(g.title)} launched! 🚀`, 'rocket_launch');
   } else {
-    showToast('Demo mode — upload your own HTML game file for the real thing! 🎮', 'sports_esports');
+    showToast('Demo mode — upload your own HTML game for the real thing! 🎮', 'sports_esports');
   }
 }
 
 function makeDemoGame(g) {
   const accent = COLORS[GENRES.indexOf(g.genre)%COLORS.length] || '#ecb2ff';
-  const title = g.title.replace(/'/g, "\\'").replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  // Build the HTML string then encode for srcdoc - keep it self-contained, no external refs
+  const title = String(g.title||'').replace(/'/g,"\\'").replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const html = [
     '<!DOCTYPE html><html><head><meta charset="utf-8">',
-    '<style>',
-    '*{margin:0;padding:0;box-sizing:border-box}',
-    'body{background:#131313;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:monospace;overflow:hidden}',
-    'canvas{border:2px solid ' + accent + ';border-radius:8px}',
-    'h1{color:' + accent + ';font-size:18px;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.1em}',
-    'p{color:#9d8ba0;font-size:12px;margin-top:8px}',
+    '<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#131313;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:monospace;overflow:hidden}',
+    'canvas{border:2px solid '+accent+';border-radius:8px}h1{color:'+accent+';font-size:18px;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.1em}p{color:#9d8ba0;font-size:12px;margin-top:8px}',
     '</style></head><body>',
-    '<h1>' + title + '</h1>',
+    '<h1>'+title+'</h1>',
     '<canvas id="c" width="480" height="270"></canvas>',
     '<p>Demo Mode · Upload your real HTML game file to replace this!</p>',
     '<script>',
-    'var c=document.getElementById("c"),ctx=c.getContext("2d");',
-    'var score=0,px=240,balls=[],keys={};',
+    'var c=document.getElementById("c"),ctx=c.getContext("2d"),score=0,px=240,balls=[],keys={};',
     'document.addEventListener("keydown",function(e){keys[e.key]=true});',
     'document.addEventListener("keyup",function(e){keys[e.key]=false});',
     'c.addEventListener("touchstart",function(e){var t=e.touches[0];keys[t.clientX<window.innerWidth/2?"ArrowLeft":"ArrowRight"]=true});',
     'c.addEventListener("touchend",function(){keys["ArrowLeft"]=false;keys["ArrowRight"]=false});',
-    'function loop(){',
-    '  ctx.fillStyle="#0e0e0e";ctx.fillRect(0,0,480,270);',
-    '  if(keys["ArrowLeft"]||keys["a"])px=Math.max(20,px-4);',
-    '  if(keys["ArrowRight"]||keys["d"])px=Math.min(460,px+4);',
-    '  ctx.fillStyle="' + accent + '";ctx.fillRect(px-35,252,70,10);',
-    '  if(Math.random()<0.025)balls.push({x:Math.random()*460+10,y:0,vy:1.5+score/25,r:5+Math.random()*4});',
-    '  balls=balls.filter(function(b){',
-    '    b.y+=b.vy;',
-    '    ctx.fillStyle="#ecb2ff";ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,6.28);ctx.fill();',
-    '    if(Math.abs(b.x-px)<40&&b.y>245&&b.y<268){score++;return false;}',
-    '    return b.y<280;',
-    '  });',
-    '  ctx.fillStyle="' + accent + '";ctx.font="bold 14px monospace";',
-    '  ctx.fillText("SCORE: "+score,10,22);',
-    '  ctx.fillStyle="#514255";ctx.font="11px monospace";',
-    '  ctx.fillText("← → or A/D to move  |  tap left/right on mobile",90,262);',
-    '  requestAnimationFrame(loop);',
-    '}',
-    'loop();',
-    '<\/script>',
-    '</body></html>'
+    'function loop(){ctx.fillStyle="#0e0e0e";ctx.fillRect(0,0,480,270);',
+    'if(keys["ArrowLeft"]||keys["a"])px=Math.max(20,px-4);',
+    'if(keys["ArrowRight"]||keys["d"])px=Math.min(460,px+4);',
+    'ctx.fillStyle="'+accent+'";ctx.fillRect(px-35,252,70,10);',
+    'if(Math.random()<0.025)balls.push({x:Math.random()*460+10,y:0,vy:1.5+score/25,r:5+Math.random()*4});',
+    'balls=balls.filter(function(b){b.y+=b.vy;ctx.fillStyle="#ecb2ff";ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,6.28);ctx.fill();',
+    'if(Math.abs(b.x-px)<40&&b.y>245&&b.y<268){score++;return false;}return b.y<280;});',
+    'ctx.fillStyle="'+accent+'";ctx.font="bold 14px monospace";ctx.fillText("SCORE: "+score,10,22);',
+    'ctx.fillStyle="#514255";ctx.font="11px monospace";ctx.fillText("← → or A/D  |  tap left/right on mobile",80,262);',
+    'requestAnimationFrame(loop);}loop();',
+    '<\/script></body></html>'
   ].join('');
-  return html.replace(/"/g, '&quot;');
+  return html.replace(/"/g,'&quot;');
 }
 
 function toggleFullscreen() {
   const area = document.getElementById('game-play-area');
-  const iframe = area ? area.querySelector('iframe') : null;
-  const target = iframe || area;
+  const target = area ? (area.querySelector('iframe') || area) : null;
   if(!target) return;
   if(target.requestFullscreen) target.requestFullscreen();
   else if(target.webkitRequestFullscreen) target.webkitRequestFullscreen();
   else if(target.mozRequestFullScreen) target.mozRequestFullScreen();
 }
 
-function hypeGame(btn) {
+async function hypeGame() {
   const g = games.find(x => x.id === currentGameId);
   if(!g) return;
-  // One hype per game per user — stored in localStorage
-  let hyped = JSON.parse(localStorage.getItem('gc_hyped') || '{}');
-  if(hyped[currentGameId]) {
-    showToast('Already hyped this one! 🔥 (One hype per game)', 'info');
-    return;
-  }
+  const alreadyHyped = await dbCheckHyped(currentGameId);
+  if(alreadyHyped) { showToast('Already hyped this one! 🔥 (One hype per game)', 'info'); return; }
+  // Mark locally immediately (optimistic)
+  const hyped = JSON.parse(localStorage.getItem('gc_hyped')||'{}');
   hyped[currentGameId] = true;
   localStorage.setItem('gc_hyped', JSON.stringify(hyped));
   g.hype = (g.hype||0) + 1;
-  document.getElementById('game-hype').textContent = fmtNum(g.hype);
-  // Visually mark button as hyped
-  const hypeBtn = document.getElementById('hype-btn');
-  if(hypeBtn) {
-    hypeBtn.style.background = 'var(--clr-secondary-container)';
-    hypeBtn.style.color = 'var(--clr-on-secondary-container)';
-    hypeBtn.style.borderColor = 'var(--clr-secondary-container)';
-    hypeBtn.querySelector('.hype-label') && (hypeBtn.querySelector('.hype-label').textContent = 'HYPED!');
-  }
+  setEl('game-hype', fmtNum(g.hype));
+  updateHypeBtn();
   showToast('Hype added! 🔥', 'local_fire_department');
-  saveData();
+  await dbSaveHype(currentGameId);
+}
+
+function setEl(elId, value, prop='textContent') {
+  const el = document.getElementById(elId);
+  if(el) el[prop] = value;
 }
 
 function updateHypeBtn() {
-  const hyped = JSON.parse(localStorage.getItem('gc_hyped') || '{}');
+  const hyped = JSON.parse(localStorage.getItem('gc_hyped')||'{}');
   const btn = document.getElementById('hype-btn');
   if(!btn) return;
   if(hyped[currentGameId]) {
@@ -1794,9 +2082,9 @@ function updateHypeBtn() {
 }
 
 function updateRatingDisplay(g) {
-  document.getElementById('current-rating-display').textContent = g.rating.toFixed(1);
-  document.getElementById('rating-count-display').textContent = `${fmtNum(g.ratingCount)} ratings`;
-  document.getElementById('stat-rating').textContent = g.rating.toFixed(1);
+  setEl('current-rating-display', g.rating.toFixed(1));
+  setEl('rating-count-display', `${fmtNum(g.ratingCount||g.rating_count||0)} ratings`);
+  setEl('stat-rating', g.rating.toFixed(1));
 }
 
 function highlightStars(val) {
@@ -1808,46 +2096,43 @@ function highlightStars(val) {
 document.addEventListener('DOMContentLoaded', () => {
   const rater = document.getElementById('star-rater');
   if(rater) {
-    rater.addEventListener('mouseover', e => {
-      if(e.target.dataset.v) highlightStars(parseInt(e.target.dataset.v));
-    });
-    rater.addEventListener('mouseleave', () => {
-      const ur = userRatings[currentGameId];
-      highlightStars(ur || 0);
-    });
-    rater.addEventListener('click', e => {
-      if(!e.target.dataset.v) return;
-      const val = parseInt(e.target.dataset.v);
-      rateGame(val);
-    });
+    rater.addEventListener('mouseover', e => { if(e.target.dataset.v) highlightStars(parseInt(e.target.dataset.v)); });
+    rater.addEventListener('mouseleave', () => highlightStars(userRatings[currentGameId]||0));
+    rater.addEventListener('click', e => { if(e.target.dataset.v) rateGame(parseInt(e.target.dataset.v)); });
   }
 });
 
-function rateGame(val) {
+async function rateGame(val) {
   const g = games.find(x => x.id === currentGameId);
   if(!g) return;
   const oldRating = userRatings[currentGameId];
+  const rc = g.ratingCount || g.rating_count || 0;
+  let newAvg, newCount;
   if(oldRating) {
-    // Update existing rating
-    const total = g.rating * g.ratingCount - oldRating + val;
-    g.rating = Math.round((total / g.ratingCount) * 10) / 10;
+    newAvg = Math.round(((g.rating * rc - oldRating + val) / rc) * 10) / 10;
+    newCount = rc;
   } else {
-    const total = g.rating * g.ratingCount + val;
-    g.ratingCount++;
-    g.rating = Math.round((total / g.ratingCount) * 10) / 10;
+    newCount = rc + 1;
+    newAvg = Math.round(((g.rating * rc + val) / newCount) * 10) / 10;
   }
+  g.rating = newAvg;
+  g.ratingCount = newCount;
+  g.rating_count = newCount;
   userRatings[currentGameId] = val;
   highlightStars(val);
-  document.getElementById('your-rating-msg').textContent = `You rated this ${val} star${val>1?'s':''}! ⭐`;
+  setEl('your-rating-msg', `You rated this ${val} star${val>1?'s':''}! ⭐`);
   updateRatingDisplay(g);
-  saveData();
-  showToast(`Rated ${val} stars! Thanks for the feedback 🎮`, 'star');
+  showToast(`Rated ${val} stars! Thanks 🎮`, 'star');
+  await dbSaveRating(currentGameId, val, newAvg, newCount);
 }
 
-function renderComments(gameId) {
-  const list = comments[gameId] || [];
+async function renderComments(gameId) {
   const el = document.getElementById('comments-list');
-  document.getElementById('comment-count-display').textContent = `${list.length} Player${list.length!==1?'s':''}`;
+  if(!el) return;
+  el.innerHTML = '<p class="text-on-surface-variant font-label-mono text-sm text-center py-lg animate-pulse">Loading lobby...</p>';
+  const list = await dbLoadComments(gameId);
+  comments[gameId] = list;
+  setEl('comment-count-display', `${list.length} Player${list.length!==1?'s':''}`);
   if(list.length === 0) {
     el.innerHTML = '<p class="text-on-surface-variant font-label-mono text-sm text-center py-lg">Be the first to drop a message! 🎮</p>';
     return;
@@ -1855,11 +2140,11 @@ function renderComments(gameId) {
   el.innerHTML = list.map(c => `
     <div class="flex gap-md">
       <div class="w-10 h-10 rounded-full bg-surface-container-highest border-2 flex-shrink-0 flex items-center justify-center" style="border-color:${c.color||'#ecb2ff'}">
-        <span class="font-bold text-sm" style="color:${c.color||'#ecb2ff'}">${c.name[0]}</span>
+        <span class="font-bold text-sm" style="color:${c.color||'#ecb2ff'}">${escapeHtml(c.name[0]||'?')}</span>
       </div>
       <div class="space-y-xs">
         <div class="flex items-center gap-md">
-          <span class="font-button-text text-sm" style="color:${c.color||'#ecb2ff'}">${c.name}</span>
+          <span class="font-button-text text-sm" style="color:${c.color||'#ecb2ff'}">${escapeHtml(c.name)}</span>
           <span class="font-label-mono text-xs text-on-surface-variant">${c.time}</span>
         </div>
         <p class="text-on-surface font-body-md text-sm">${escapeHtml(c.text)}</p>
@@ -1867,40 +2152,64 @@ function renderComments(gameId) {
     </div>`).join('');
 }
 
-function postComment() {
+async function postComment() {
   const input = document.getElementById('comment-input');
-  const text = input.value.trim();
+  const text = (input.value||'').trim();
   if(!text) { showToast('Type something first! 😤', 'error'); return; }
-  if(!comments[currentGameId]) comments[currentGameId] = [];
+  const profileName = window._commentAuthorName || getProfile().name || 'GamerAnuj';
   const colors = ['#ecb2ff','#32ff00','#00dbe9','#edffe1','#7df4ff'];
-  comments[currentGameId].unshift({
-    name: window._commentAuthorName || getProfile().name || 'GamerAnuj',
-    text,
-    time: 'Just now',
-    color: colors[Math.floor(Math.random()*colors.length)]
-  });
+  const color = colors[Math.floor(Math.random()*colors.length)];
   input.value = '';
-  renderComments(currentGameId);
-  saveData();
+  // Optimistic UI — add comment immediately
+  const newComment = { name: profileName, text, color, time: 'Just now' };
+  if(!comments[currentGameId]) comments[currentGameId] = [];
+  comments[currentGameId].unshift(newComment);
+  renderCommentsFromCache(currentGameId);
   showToast('Dropped in the lobby! 🎤', 'chat');
+  // Then persist
+  await dbPostComment(currentGameId, text, profileName, color);
+}
+
+function renderCommentsFromCache(gameId) {
+  const el = document.getElementById('comments-list');
+  if(!el) return;
+  const list = comments[gameId] || [];
+  setEl('comment-count-display', `${list.length} Player${list.length!==1?'s':''}`);
+  if(list.length === 0) { el.innerHTML = '<p class="text-on-surface-variant font-label-mono text-sm text-center py-lg">Be the first to drop a message! 🎮</p>'; return; }
+  el.innerHTML = list.map(c => `
+    <div class="flex gap-md">
+      <div class="w-10 h-10 rounded-full bg-surface-container-highest border-2 flex-shrink-0 flex items-center justify-center" style="border-color:${c.color||'#ecb2ff'}">
+        <span class="font-bold text-sm" style="color:${c.color||'#ecb2ff'}">${escapeHtml(c.name[0]||'?')}</span>
+      </div>
+      <div class="space-y-xs">
+        <div class="flex items-center gap-md">
+          <span class="font-button-text text-sm" style="color:${c.color||'#ecb2ff'}">${escapeHtml(c.name)}</span>
+          <span class="font-label-mono text-xs text-on-surface-variant">${c.time}</span>
+        </div>
+        <p class="text-on-surface font-body-md text-sm">${escapeHtml(c.text)}</p>
+      </div>
+    </div>`).join('');
 }
 
 function renderRelatedGames(g) {
-  const related = games.filter(x => x.id !== g.id && (x.genre === g.genre || x.tags?.some(t => g.tags?.includes(t)))).slice(0,4);
+  const related = games.filter(x => x.id !== g.id && (x.genre===g.genre || (x.tags||[]).some(t=>(g.tags||[]).includes(t)))).slice(0,4);
   const el = document.getElementById('related-games-list');
-  if(related.length === 0) { el.innerHTML = '<p class="text-on-surface-variant font-label-mono text-xs text-center">No related games yet</p>'; return; }
+  if(!el) return;
+  if(related.length===0) { el.innerHTML='<p class="text-on-surface-variant font-label-mono text-xs text-center">No related games yet</p>'; return; }
   el.innerHTML = related.map(r => {
-    const accent = COLORS[GENRES.indexOf(r.genre)%COLORS.length] || '#ecb2ff';
-    return `<div class="group flex gap-md bg-surface-container-low p-sm rounded-md border border-outline-variant hard-shadow-hover transition-all cursor-pointer" onclick="navigate('game','${r.id}')">
+    const accent = COLORS[GENRES.indexOf(r.genre)%COLORS.length]||'#ecb2ff';
+    return `<div class="group flex gap-md bg-surface-container-low p-sm rounded-md border border-outline-variant hard-shadow-hover transition-all cursor-pointer" onclick="navigate('game','${escapeHtml(r.id)}')">
       <div class="w-16 h-16 rounded flex-shrink-0 flex items-center justify-center" style="background:${accent}22"><span class="text-2xl">${GENRE_EMOJI[r.genre]||'🎮'}</span></div>
       <div class="flex flex-col justify-center min-w-0">
-        <h4 class="font-button-text text-sm text-on-surface group-hover:text-tertiary transition-colors truncate">${r.title}</h4>
-        <p class="font-label-mono text-xs text-on-surface-variant">${r.genre}</p>
+        <h4 class="font-button-text text-sm text-on-surface group-hover:text-tertiary transition-colors truncate">${escapeHtml(r.title)}</h4>
+        <p class="font-label-mono text-xs text-on-surface-variant">${escapeHtml(r.genre)}</p>
         <div class="flex items-center gap-xs mt-xs text-primary">${makeStars(r.rating)}<span class="font-label-mono text-xs ml-xs">${r.rating.toFixed(1)}</span></div>
       </div>
     </div>`;
   }).join('');
 }
+
+// ── 14. UPLOAD ────────────────────────────────────────────────────
 
 let uploadedFile = null;
 let selectedGenre = '';
@@ -1911,37 +2220,53 @@ function initUploadPage() {
   document.getElementById('drop-zone').classList.remove('upload-drop-active');
   document.getElementById('file-selected').classList.add('hidden');
   document.getElementById('validation-result').classList.add('hidden');
-  document.getElementById('upload-title').value = '';
-  document.getElementById('upload-desc').value = '';
-  document.getElementById('upload-author').value = '';
+  ['upload-title','upload-desc','upload-author'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('integrity-bar').style.width = '0%';
   document.getElementById('integrity-pct').textContent = '0% COMPLETE';
-  document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#genre-grid .category-btn').forEach(b => b.classList.remove('selected'));
 
-  // Drag and drop
   const dz = document.getElementById('drop-zone');
-  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('upload-drop-active'); });
-  dz.addEventListener('dragleave', () => dz.classList.remove('upload-drop-active'));
-  dz.addEventListener('drop', e => {
-    e.preventDefault(); dz.classList.remove('upload-drop-active');
-    const file = e.dataTransfer.files[0];
-    if(file) processUploadFile(file);
-  });
+  const newDz = dz.cloneNode(true); dz.parentNode.replaceChild(newDz, dz);
+  newDz.addEventListener('dragover', e => { e.preventDefault(); newDz.classList.add('upload-drop-active'); });
+  newDz.addEventListener('dragleave', () => newDz.classList.remove('upload-drop-active'));
+  newDz.addEventListener('drop', e => { e.preventDefault(); newDz.classList.remove('upload-drop-active'); const f=e.dataTransfer.files[0]; if(f) processUploadFile(f); });
+  newDz.addEventListener('click', () => document.getElementById('file-input').click());
 
-  // Category buttons
-  document.querySelectorAll('.category-btn').forEach(btn => {
+  document.querySelectorAll('#genre-grid .category-btn').forEach(btn => {
     btn.onclick = function() {
-      document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
+      document.querySelectorAll('#genre-grid .category-btn').forEach(b=>b.classList.remove('selected'));
       this.classList.add('selected');
       selectedGenre = this.dataset.genre;
       calcIntegrity();
     };
   });
-
-  // Live integrity
   ['upload-title','upload-desc','upload-author'].forEach(id => {
-    document.getElementById(id).addEventListener('input', calcIntegrity);
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('input', calcIntegrity);
   });
+
+  // Show Supabase status banner
+  showSupabaseBanner();
+}
+
+function showSupabaseBanner() {
+  let banner = document.getElementById('supabase-banner');
+  if(!banner) {
+    banner = document.createElement('div');
+    banner.id = 'supabase-banner';
+    const uploadPage = document.querySelector('[data-page="upload"] main');
+    if(uploadPage) uploadPage.prepend(banner);
+  }
+  if(SUPABASE_CONFIGURED) {
+    banner.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(50,255,0,0.08);border:1px solid rgba(50,255,0,0.3);border-radius:12px;margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#32ff00;">
+      <span style="font-size:16px;">●</span> Connected to Supabase — uploads are shared with everyone in real-time 🌍
+    </div>`;
+  } else {
+    banner.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(255,180,171,0.08);border:1px solid rgba(255,180,171,0.3);border-radius:12px;margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffb4ab;">
+      <span style="font-size:16px;">⚠</span> Local mode — paste your Supabase URL + key in the code to share games with everyone.
+      <a href="https://supabase.com" target="_blank" style="color:#00dbe9;text-decoration:underline;margin-left:4px;">Get free backend →</a>
+    </div>`;
+  }
 }
 
 function handleFileSelect(input) {
@@ -1950,46 +2275,38 @@ function handleFileSelect(input) {
 
 function processUploadFile(file) {
   uploadedFile = file;
-  document.getElementById('selected-file-name').textContent = file.name;
-  document.getElementById('selected-file-size').textContent = (file.size/1024).toFixed(1)+' KB';
+  setEl('selected-file-name', file.name);
+  setEl('selected-file-size', (file.size/1024).toFixed(1)+' KB');
   document.getElementById('file-selected').classList.remove('hidden');
-  document.getElementById('drop-zone').querySelector('.flex').style.minHeight = '80px';
-
   if(file.name.endsWith('.html')) {
     const reader = new FileReader();
     reader.onload = e => validateGame(e.target.result, file.name);
     reader.readAsText(file);
   } else {
-    showValidation([
-      {pass:true, msg:'File received'},
-      {pass:true, msg:'.zip format accepted'},
-      {pass:false, msg:'Full validation runs on HTML files only'},
-    ]);
+    showValidation([{pass:true,msg:'File received'},{pass:true,msg:'.zip accepted'},{pass:false,msg:'Full validation on HTML only'}]);
   }
   calcIntegrity();
 }
 
 function validateGame(html, fname) {
-  const checks = [];
-  checks.push({pass:true, msg:`File received: ${fname}`});
-  checks.push({pass:html.includes('<!DOCTYPE html')||html.includes('<html'), msg:'Valid HTML document structure'});
-  checks.push({pass:html.includes('<canvas')||html.includes('<script'), msg:'Game logic detected (canvas/scripts found)'});
-  const hasInput = html.includes('keydown')||html.includes('onclick')||html.includes('addEventListener');
-  checks.push({pass:hasInput, msg:'User interactivity detected'});
-  const hasLoop = html.includes('requestAnimationFrame')||html.includes('setInterval')||html.includes('setTimeout');
-  checks.push({pass:hasLoop, msg:'Game loop / animation detected'});
-  checks.push({pass:html.length > 500, msg:'Content length looks substantial'});
-  showValidation(checks);
+  showValidation([
+    {pass:true, msg:`File received: ${fname}`},
+    {pass:html.includes('<!DOCTYPE html')||html.includes('<html'), msg:'Valid HTML structure'},
+    {pass:html.includes('<canvas')||html.includes('<script'), msg:'Game logic detected'},
+    {pass:html.includes('keydown')||html.includes('onclick')||html.includes('addEventListener'), msg:'User interactivity found'},
+    {pass:html.includes('requestAnimationFrame')||html.includes('setInterval'), msg:'Game loop detected'},
+    {pass:html.length > 500, msg:'Content looks substantial'},
+  ]);
 }
 
 function showValidation(checks) {
   const all = checks.every(c=>c.pass);
-  document.getElementById('val-icon').textContent = all ? 'verified' : 'warning';
-  document.getElementById('val-icon').style.color = all ? '#32ff00' : '#ffb4ab';
-  document.getElementById('val-checks').innerHTML = checks.map(c => `
-    <div class="flex items-center gap-sm font-label-mono text-xs py-xs">
+  setEl('val-icon', all?'verified':'warning');
+  document.getElementById('val-icon').style.color = all?'#32ff00':'#ffb4ab';
+  document.getElementById('val-checks').innerHTML = checks.map(c =>
+    `<div class="flex items-center gap-sm font-label-mono text-xs py-xs">
       <span class="material-symbols-outlined fill-icon text-base" style="color:${c.pass?'#32ff00':'#ffb4ab'}">${c.pass?'check_circle':'cancel'}</span>
-      <span style="color:${c.pass?'#edffe1':'#d4c0d7'}">${c.msg}</span>
+      <span style="color:${c.pass?'#edffe1':'#d4c0d7'}">${escapeHtml(c.msg)}</span>
     </div>`).join('');
   document.getElementById('validation-result').classList.remove('hidden');
   calcIntegrity();
@@ -2006,131 +2323,144 @@ function clearFile() {
 function calcIntegrity() {
   let score = 0;
   if(uploadedFile) score += 30;
-  if(document.getElementById('upload-title').value.trim().length > 2) score += 25;
-  if(document.getElementById('upload-desc').value.trim().length > 10) score += 20;
-  if(document.getElementById('upload-author').value.trim().length > 1) score += 15;
+  if((document.getElementById('upload-title')?.value||'').trim().length > 2) score += 25;
+  if((document.getElementById('upload-desc')?.value||'').trim().length > 10) score += 20;
+  if((document.getElementById('upload-author')?.value||'').trim().length > 1) score += 15;
   if(selectedGenre) score += 10;
   uploadIntegrity = Math.min(100, score);
   document.getElementById('integrity-bar').style.width = uploadIntegrity+'%';
   document.getElementById('integrity-pct').textContent = uploadIntegrity+'% COMPLETE';
 }
 
-function submitUpload() {
-  const title = document.getElementById('upload-title').value.trim();
-  const desc = document.getElementById('upload-desc').value.trim();
-  const author = document.getElementById('upload-author').value.trim();
-  if(!title || !desc || !author) { showToast('Fill in the required fields first! 📋', 'error'); return; }
+async function submitUpload() {
+  const title = (document.getElementById('upload-title')?.value||'').trim();
+  const desc  = (document.getElementById('upload-desc')?.value||'').trim();
+  const author= (document.getElementById('upload-author')?.value||'').trim();
+  if(!title||!desc||!author) { showToast('Fill in the required fields first! 📋', 'error'); return; }
   if(!uploadedFile) { showToast('Upload a game file first! 📁', 'upload'); return; }
+
+  const btn = document.querySelector('[onclick="submitUpload()"]');
+  if(btn) { btn.disabled = true; btn.textContent = 'UPLOADING...'; }
 
   const newGame = {
     id: 'user-' + Date.now(),
-    title, desc, author: author.startsWith('@') ? author : '@'+author,
+    title, desc,
+    author: author.startsWith('@') ? author : '@'+author,
     genre: selectedGenre || 'Arcade',
-    tags: [selectedGenre?.toLowerCase() || 'arcade', 'community'],
-    rating: 0, ratingCount: 0, plays: 0, hype: 0,
+    tags: [selectedGenre?.toLowerCase()||'arcade','community'],
+    rating: 0, ratingCount: 0, rating_count: 0,
+    plays: 0, hype: 0,
     date: new Date().toISOString().slice(0,10),
-    uploaded: true,
-    htmlContent: null
+    uploaded: true, html_content: null,
   };
+
+  showUploadProgress('Reading file...', 30);
 
   if(uploadedFile.name.endsWith('.html')) {
     const reader = new FileReader();
-    reader.onload = e => {
-      newGame.htmlContent = e.target.result;
-      finalizeUpload(newGame);
+    reader.onload = async e => {
+      const saved = await dbUploadGame(newGame, e.target.result);
+      if(btn) { btn.disabled = false; btn.innerHTML = 'INITIALIZE UPLOAD <span class="material-symbols-outlined">rocket_launch</span>'; }
+      showToast('Game uploaded to the Vault! 🚀', 'rocket_launch');
+      setTimeout(() => navigate('game', saved.id), 600);
     };
     reader.readAsText(uploadedFile);
   } else {
-    finalizeUpload(newGame);
+    const saved = await dbUploadGame(newGame, null);
+    if(btn) { btn.disabled = false; btn.innerHTML = 'INITIALIZE UPLOAD <span class="material-symbols-outlined">rocket_launch</span>'; }
+    showToast('Game uploaded! 🚀', 'rocket_launch');
+    setTimeout(() => navigate('game', saved.id), 600);
   }
 }
 
-function finalizeUpload(game) {
-  games.unshift(game);
-  saveData();
-  showToast('Game uploaded to the Vault! 🚀', 'rocket_launch');
-  setTimeout(() => navigate('game', game.id), 600);
-}
+// ── 15. LEADERBOARD ───────────────────────────────────────────────
 
 function renderLeaderboard(mode) {
   currentLbMode = mode;
-  let sorted;
-  let subtitle;
-  if(mode==='rated') { sorted=[...games].sort((a,b)=>b.rating-a.rating||b.ratingCount-a.ratingCount); subtitle='By Rating'; }
+  let sorted, subtitle;
+  if(mode==='rated')    { sorted=[...games].sort((a,b)=>b.rating-a.rating); subtitle='By Rating'; }
   else if(mode==='played') { sorted=[...games].sort((a,b)=>b.plays-a.plays); subtitle='By Plays'; }
-  else if(mode==='trending') { sorted=[...games].sort((a,b)=>b.hype-a.hype); subtitle='By Hype'; }
-  else { sorted=[...games].sort((a,b)=>new Date(b.date)-new Date(a.date)); subtitle='Newest First'; }
-  document.getElementById('lb-subtitle').textContent = subtitle;
+  else if(mode==='trending'){ sorted=[...games].sort((a,b)=>b.hype-a.hype); subtitle='By Hype'; }
+  else { sorted=[...games].sort((a,b)=>new Date(b.date||b.created_at)-new Date(a.date||a.created_at)); subtitle='Newest First'; }
+  setEl('lb-subtitle', subtitle);
 
-  const podium = sorted.slice(0,3);
-  const podiumEl = document.getElementById('podium-section');
   const podiumOrder = [1,0,2];
-  podiumEl.innerHTML = podiumOrder.map(i => {
+  const podium = sorted.slice(0,3);
+  const rankColors = ['#32ff00','#ecb2ff','#00dbe9'];
+  const rankLabels = ['🥇 1st','🥈 2nd','🥉 3rd'];
+  const rankClass  = ['rank-1','rank-2','rank-3'];
+  document.getElementById('podium-section').innerHTML = podiumOrder.map(i => {
     const g = podium[i];
     if(!g) return '<div></div>';
-    const rankColors = ['#32ff00','#ecb2ff','#00dbe9'];
-    const rankLabels = ['🥇 1st','🥈 2nd','🥉 3rd'];
-    const heights = ['lg:mt-0','lg:mt-8','lg:mt-12'];
-    const rankClass = ['rank-1','rank-2','rank-3'];
-    return `<div class="flex flex-col items-center ${heights[i]}">
-      <div class="${rankClass[i]} border-2 rounded-lg p-md hard-shadow cursor-pointer hover:opacity-90 transition-all w-full text-center" onclick="navigate('game','${g.id}')">
+    const mt = i===0?'':'margin-top:'+(i===1?'2rem':'3rem');
+    return `<div style="display:flex;flex-direction:column;align-items:center;${mt}">
+      <div class="${rankClass[i]} border-2 rounded-lg p-md hard-shadow cursor-pointer hover:opacity-90 transition-all w-full text-center" onclick="navigate('game','${escapeHtml(g.id)}')">
         <div class="text-3xl mb-sm">${GENRE_EMOJI[g.genre]||'🎮'}</div>
-        <p class="font-button-text text-on-surface text-sm truncate">${g.title}</p>
-        <p class="font-label-mono text-xs text-on-surface-variant truncate">${g.author}</p>
+        <p class="font-button-text text-on-surface text-sm truncate">${escapeHtml(g.title)}</p>
+        <p class="font-label-mono text-xs text-on-surface-variant truncate">${escapeHtml(g.author)}</p>
         <p class="font-headline-lg text-lg mt-sm font-black" style="color:${rankColors[i]}">${mode==='played'?fmtNum(g.plays)+' plays':mode==='trending'?fmtNum(g.hype)+' hype':g.rating.toFixed(1)+' ⭐'}</p>
       </div>
       <div class="mt-sm font-label-mono text-xs tracking-widest" style="color:${rankColors[i]}">${rankLabels[i]}</div>
     </div>`;
   }).join('');
 
-  document.getElementById('leaderboard-table').innerHTML = sorted.map((g,i) => makeListItem(g, i+1)).join('');
+  document.getElementById('leaderboard-table').innerHTML = sorted.map((g,i) => makeListItem(g,i+1)).join('');
 }
 
 function switchLeaderboard(mode, btn) {
-  document.querySelectorAll('[data-lb]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-lb]').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderLeaderboard(mode);
 }
 
+// ── 16. COMMUNITY ─────────────────────────────────────────────────
+
 function renderCommunity() {
   communityGenreFilter = 'all';
-  document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('active'));
   document.querySelector('[data-filter="all"]').classList.add('active');
   filterCommunity();
 }
 
 function filterByGenre(genre, btn) {
   communityGenreFilter = genre;
-  document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   filterCommunity();
 }
 
 function filterCommunity() {
-  const q = document.getElementById('community-search').value.toLowerCase();
+  const q = (document.getElementById('community-search')?.value||'').toLowerCase();
   let filtered = games;
-  if(communityGenreFilter !== 'all') filtered = filtered.filter(g => g.genre === communityGenreFilter);
-  if(q) filtered = filtered.filter(g => g.title.toLowerCase().includes(q) || g.author.toLowerCase().includes(q) || (g.tags||[]).some(t=>t.includes(q)));
+  if(communityGenreFilter!=='all') filtered = filtered.filter(g=>g.genre===communityGenreFilter);
+  if(q) filtered = filtered.filter(g=>
+    g.title.toLowerCase().includes(q) ||
+    g.author.toLowerCase().includes(q) ||
+    (g.tags||[]).some(t=>String(t).includes(q))
+  );
   const grid = document.getElementById('community-results');
   const empty = document.getElementById('community-empty');
-  if(filtered.length === 0) { grid.innerHTML = ''; empty.classList.remove('hidden'); }
-  else { empty.classList.add('hidden'); grid.innerHTML = filtered.map(g => makeGameCard(g)).join(''); }
+  if(filtered.length===0) { grid.innerHTML=''; empty.classList.remove('hidden'); }
+  else { empty.classList.add('hidden'); grid.innerHTML=filtered.map(g=>makeGameCard(g)).join(''); }
 }
 
+// ── 17. PROFILE ───────────────────────────────────────────────────
+
 function renderProfile() {
-  // Apply saved profile data
   applyProfileToPage(getProfile());
-  const myGames = games.filter(g => g.uploaded);
-  document.getElementById('profile-game-count').textContent = myGames.length;
+  const uid = getUid();
+  // "My games" = games where the user uploaded them (stored in localStorage flag)
+  const myGameIds = JSON.parse(localStorage.getItem('gc_my_games')||'[]');
+  const myGames = games.filter(g => myGameIds.includes(g.id) || g.uploaded);
+  setEl('profile-game-count', myGames.length);
   const grid = document.getElementById('profile-uploaded-grid');
   const empty = document.getElementById('profile-empty');
-  if(myGames.length === 0) { grid.innerHTML=''; empty.classList.remove('hidden'); }
-  else { empty.classList.add('hidden'); grid.innerHTML = myGames.map(g=>makeGameCard(g)).join(''); }
+  if(myGames.length===0) { grid.innerHTML=''; empty.classList.remove('hidden'); }
+  else { empty.classList.add('hidden'); grid.innerHTML=myGames.map(g=>makeGameCard(g)).join(''); }
 
-  // Rated games
   const ratedIds = Object.keys(userRatings);
-  const ratedGames = games.filter(g => ratedIds.includes(g.id));
-  document.getElementById('profile-rated-grid').innerHTML = ratedGames.length > 0
+  const ratedGames = games.filter(g=>ratedIds.includes(g.id));
+  document.getElementById('profile-rated-grid').innerHTML = ratedGames.length>0
     ? ratedGames.map(g=>`<div>${makeGameCard(g)}<p class="text-center font-label-mono text-xs mt-xs" style="color:#32ff00">You rated: ${userRatings[g.id]}⭐</p></div>`).join('')
     : '<p class="col-span-3 text-center py-xl text-on-surface-variant font-label-mono">No rated games yet. Go play something! 🎮</p>';
 
@@ -2142,36 +2472,102 @@ function renderAchievements(myGames, ratedGames) {
     {icon:'upload',label:'First Drop',desc:'Upload your first game',color:'#32ff00',unlocked:myGames.length>=1},
     {icon:'star',label:'Critic',desc:'Rate 3+ games',color:'#ecb2ff',unlocked:ratedGames.length>=3},
     {icon:'sports_esports',label:'Player',desc:'Play any game',color:'#00dbe9',unlocked:Object.keys(userRatings).length>0},
-    {icon:'chat',label:'Lobby Regular',desc:'Post a comment',color:'#32ff00',unlocked:Object.values(comments).some(c=>c.some(x=>x.name===(window._commentAuthorName||getProfile().name||'GamerAnuj')))},
+    {icon:'chat',label:'Lobby Regular',desc:'Post a comment',color:'#32ff00',unlocked:!!localStorage.getItem('gc_commented')},
     {icon:'workspace_premium',label:'Vault Master',desc:'Upload 5 games',color:'#ecb2ff',unlocked:myGames.length>=5},
     {icon:'emoji_events',label:'Legend',desc:'Get a top-rated game',color:'#ffb300',unlocked:myGames.some(g=>g.rating>=4.5)},
   ];
-  document.getElementById('achievements-grid').innerHTML = achieves.map(a => `
+  document.getElementById('achievements-grid').innerHTML = achieves.map(a=>`
     <div class="bg-surface-container rounded-lg border border-outline-variant p-md hard-shadow text-center ${a.unlocked?'':'opacity-40'}">
-      <div class="w-14 h-14 rounded-full mx-auto mb-sm flex items-center justify-center" style="background:${a.color}22; border:2px solid ${a.color}">
+      <div class="w-14 h-14 rounded-full mx-auto mb-sm flex items-center justify-center" style="background:${a.color}22;border:2px solid ${a.color}">
         <span class="material-symbols-outlined fill-icon text-2xl" style="color:${a.color}">${a.icon}</span>
       </div>
       <p class="font-button-text text-sm text-on-surface">${a.label}</p>
       <p class="font-label-mono text-xs text-on-surface-variant mt-xs">${a.desc}</p>
-      ${a.unlocked?`<span class="mt-sm inline-block px-sm py-xs rounded-full font-label-mono text-xs" style="background:${a.color}22;color:${a.color}">UNLOCKED ✓</span>`:'<span class="mt-sm inline-block px-sm py-xs rounded-full font-label-mono text-xs bg-surface-container-highest text-on-surface-variant">LOCKED 🔒</span>'}
+      ${a.unlocked
+        ?`<span class="mt-sm inline-block px-sm py-xs rounded-full font-label-mono text-xs" style="background:${a.color}22;color:${a.color}">UNLOCKED ✓</span>`
+        :'<span class="mt-sm inline-block px-sm py-xs rounded-full font-label-mono text-xs bg-surface-container-highest text-on-surface-variant">LOCKED 🔒</span>'}
     </div>`).join('');
 }
 
 function switchProfileTab(tab, btn) {
-  ['uploaded','rated','achievements'].forEach(t => {
-    document.getElementById('tab-'+t).classList.toggle('hidden', t !== tab);
+  ['uploaded','rated','achievements'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('hidden', t!==tab);
   });
-  document.querySelectorAll('.profile-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.profile-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
 
-function escapeHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// ── 18. PROFILE EDIT ─────────────────────────────────────────────
+
+const AVATAR_EMOJIS=['🎮','🕹️','👾','🤖','🦾','🔥','⚡','💥','🌌','🎯','🏆','👑','🐉','🦊','🎲','🌀','🚀','💀','🎃','🌟'];
+let avatarIdx=0, editGenre='';
+
+function getProfile() {
+  return JSON.parse(localStorage.getItem('gc_profile')||'{"name":"@GamerAnuj","bio":"Indie game developer & arcade enjoyer 🕹️ | Joined June 2024","avatar":"🎮","genre":"Arcade","website":""}');
+}
+function saveProfile(p) { localStorage.setItem('gc_profile', JSON.stringify(p)); }
+
+function applyProfileToPage(p) {
+  setEl('profile-display-name', p.name);
+  setEl('profile-display-bio', p.bio||'No bio yet.');
+  const avatarBig = document.getElementById('profile-avatar-big');
+  if(avatarBig) avatarBig.textContent = p.avatar||'🎮';
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function openEditProfile() {
+  const p = getProfile();
+  setEl('edit-username', p.name||'@GamerAnuj', 'value');
+  setEl('edit-bio', p.bio||'', 'value');
+  setEl('edit-website', p.website||'', 'value');
+  avatarIdx = Math.max(0, AVATAR_EMOJIS.indexOf(p.avatar));
+  setEl('profile-avatar-preview', AVATAR_EMOJIS[avatarIdx]);
+  editGenre = p.genre||'';
+  document.querySelectorAll('#edit-genre-grid .category-btn').forEach(b=>{
+    b.classList.toggle('selected', b.dataset.g===editGenre);
+    b.onclick = function() { editGenre=this.dataset.g; document.querySelectorAll('#edit-genre-grid .category-btn').forEach(x=>x.classList.remove('selected')); this.classList.add('selected'); };
+  });
+  document.getElementById('edit-profile-modal').style.display='block';
+  setTimeout(()=>document.getElementById('edit-username')?.focus(),100);
+}
+
+function closeEditProfile() { document.getElementById('edit-profile-modal').style.display='none'; }
+function closeEditProfileOnBg(e) { if(e.target===document.getElementById('edit-profile-modal')) closeEditProfile(); }
+function cycleAvatar() { avatarIdx=(avatarIdx+1)%AVATAR_EMOJIS.length; setEl('profile-avatar-preview', AVATAR_EMOJIS[avatarIdx]); }
+
+function saveEditProfile() {
+  const name = (document.getElementById('edit-username')?.value||'').trim();
+  if(!name) { showToast('Handle cannot be empty!','error'); return; }
+  const p = {
+    name: name.startsWith('@')?name:'@'+name,
+    bio: (document.getElementById('edit-bio')?.value||'').trim()||'No bio yet.',
+    avatar: AVATAR_EMOJIS[avatarIdx],
+    genre: editGenre||'Arcade',
+    website: (document.getElementById('edit-website')?.value||'').trim(),
+  };
+  saveProfile(p);
+  applyProfileToPage(p);
+  closeEditProfile();
+  window._commentAuthorName = p.name;
+  showToast('Profile saved! Looking fresh 🔥','check_circle');
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeEditProfile(); });
+
+// ── 19. UTILS ─────────────────────────────────────────────────────
+
+function escapeHtml(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── 20. INIT ──────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Load games (from Supabase or localStorage fallback)
+  await dbLoadGames();
+  await dbLoadRatingsForUser();
   renderHome();
-  // Micro-interactions
+
+  // Micro-interaction: button press scale
   document.addEventListener('click', e => {
     const btn = e.target.closest('button');
     if(btn && !btn.classList.contains('vibrate-hover')) {
@@ -2179,86 +2575,33 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => btn.style.transform = '', 80);
     }
   });
+
+  // Track "commented" achievement
+  const origPostComment = window.postComment;
+  // Achievement: mark commented in localStorage when a comment is posted
 });
 
-// ── EDIT PROFILE ─────────────────────────────────────────────────
-const AVATAR_EMOJIS = ['🎮','🕹️','👾','🤖','🦾','🔥','⚡','💥','🌌','🎯','🏆','👑','🐉','🦊','🎲','🌀','🚀','💀','🎃','🌟'];
-let avatarIdx = 0;
-let editGenre = '';
-
-function getProfile() {
-  return JSON.parse(localStorage.getItem('gc_profile') || '{"name":"@GamerAnuj","bio":"Indie game developer & arcade enjoyer 🕹️ | Joined June 2024","avatar":"🎮","genre":"Arcade","website":""}');
-}
-function saveProfile(p) { localStorage.setItem('gc_profile', JSON.stringify(p)); }
-
-function applyProfileToPage(p) {
-  const nameEl = document.getElementById('profile-display-name');
-  const bioEl = document.getElementById('profile-display-bio');
-  const avatarBig = document.getElementById('profile-avatar-big');
-  if(nameEl) nameEl.textContent = p.name;
-  if(bioEl) bioEl.textContent = p.bio || 'No bio yet.';
-  if(avatarBig) { avatarBig.textContent = p.avatar || '🎮'; }
+// Patch finalizeUpload to track ownership locally
+async function finalizeUpload(game) {
+  const myGameIds = JSON.parse(localStorage.getItem('gc_my_games')||'[]');
+  myGameIds.push(game.id);
+  localStorage.setItem('gc_my_games', JSON.stringify(myGameIds));
 }
 
-function openEditProfile() {
-  const p = getProfile();
-  document.getElementById('edit-username').value = p.name || '@GamerAnuj';
-  document.getElementById('edit-bio').value = p.bio || '';
-  document.getElementById('edit-website').value = p.website || '';
-  avatarIdx = AVATAR_EMOJIS.indexOf(p.avatar) !== -1 ? AVATAR_EMOJIS.indexOf(p.avatar) : 0;
-  document.getElementById('profile-avatar-preview').textContent = AVATAR_EMOJIS[avatarIdx];
-  editGenre = p.genre || '';
-  document.querySelectorAll('#edit-genre-grid .category-btn').forEach(b => {
-    b.classList.toggle('selected', b.dataset.g === editGenre);
-  });
-  document.querySelectorAll('#edit-genre-grid .category-btn').forEach(b => {
-    b.onclick = function() {
-      editGenre = this.dataset.g;
-      document.querySelectorAll('#edit-genre-grid .category-btn').forEach(x => x.classList.remove('selected'));
-      this.classList.add('selected');
-    };
-  });
-  document.getElementById('edit-profile-modal').style.display = 'block';
-  setTimeout(() => document.getElementById('edit-username').focus(), 100);
-}
-
-function closeEditProfile() {
-  document.getElementById('edit-profile-modal').style.display = 'none';
-}
-
-function closeEditProfileOnBg(e) {
-  if(e.target === document.getElementById('edit-profile-modal')) closeEditProfile();
-}
-
-function cycleAvatar() {
-  avatarIdx = (avatarIdx + 1) % AVATAR_EMOJIS.length;
-  document.getElementById('profile-avatar-preview').textContent = AVATAR_EMOJIS[avatarIdx];
-}
-
-function saveEditProfile() {
-  const name = document.getElementById('edit-username').value.trim();
-  if(!name) { showToast('Handle cannot be empty!', 'error'); return; }
-  const p = {
-    name: name.startsWith('@') ? name : '@' + name,
-    bio: document.getElementById('edit-bio').value.trim() || 'No bio yet.',
-    avatar: AVATAR_EMOJIS[avatarIdx],
-    genre: editGenre || 'Arcade',
-    website: document.getElementById('edit-website').value.trim(),
+// Patch postComment to track achievement
+const _origPostComment = window.postComment;
+document.addEventListener('DOMContentLoaded', () => {
+  // Mark first comment achievement
+  const origPost = postComment;
+  window.postComment = async function() {
+    await origPost.apply(this, arguments);
+    localStorage.setItem('gc_commented', '1');
   };
-  saveProfile(p);
-  applyProfileToPage(p);
-  closeEditProfile();
-  // Also update comment author name going forward
-  window._commentAuthorName = p.name;
-  showToast('Profile saved! Looking fresh 🔥', 'check_circle');
-}
-
-// Close modal on Escape key
-document.addEventListener('keydown', function(e) {
-  if(e.key === 'Escape') closeEditProfile();
 });
+
 
 </script>
+
 
 <!-- Mobile Bottom Navigation -->
 <nav class="mobile-bottom-nav" id="mobile-nav">
